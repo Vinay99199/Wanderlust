@@ -13,7 +13,6 @@ Reviews & Ratings,
 React, Node.js, Express, MongoDB
 
 ⚙️Setup:
-git clone https://github.com/your-username/wanderlust.git
 cd wanderlust
 npm install
 npm start
