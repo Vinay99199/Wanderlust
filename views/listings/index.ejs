@@ -1,17 +1,14 @@
 <% layout("/layouts/boilerplate")%>
-    <!-- <h3>All Listings</h3> -->
-    <!-- <form method="GET" action="/listings/new">
-        <button>Create New Listing</button>
-    </form> -->
     <style>
         #filters{
             display: flex;
             flex-wrap: wrap;
             align-items: center;
+            gap: 1.5rem;
         }
         .filter{
             text-align: center;
-            margin-right: 2rem;
+            margin-right: 0;
             margin-top: 2rem;
             opacity: 0.8;
         }
@@ -36,6 +33,9 @@
             margin-left: 3rem;
             display: flex;
             align-items: center;
+        }
+        #switchCheckDefault{
+            cursor: pointer;
         }
     </style>
 
@@ -101,44 +101,49 @@
                 <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
             </div>
         </div>
-        
     </div>
     
 
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 g-2 mt-3">        
+        <% for(let listing of allListings) { %> 
+            <div class="col position-relative">
+                <i class="fa-regular fa-heart heart-icon position-absolute top-0 end-0 m-2 fs-5"></i>
+                <a href="/listings/<%= listing._id %>" class="listing-link">
 
-
-    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-        <% for(let listing of allListings) {%> 
-            <a href="/listings/<%= listing._id %> " class="listing-link">
-            <div class="card col listing-card">
-                <img src="<%= listing.image.url%>"
-                   class="card-img-top" 
-                   alt="listing-image" 
-                   style="height: 20rem;">
-                   
-                   <div class="card-img-overlay"></div>
-                <div class="card-body">
+                <div class="card listing-card">
+                    <img src="<%= listing.image.url %>"class="card-img-top"style="height:16rem; object-fit:cover;">
+                  <div class="card-img-overlay"></div>
+                  <div class="card-body">
                     <p class="card-text">
-                        <b><%= listing.title %></b> <br>
-                        <%=listing.price.toLocaleString('en-IN')%> / night
-                        <i class="tax-info">&nbsp; &nbsp;+17% GST</i>
+                        <b><%= listing.title %></b><br>
+                        ₹ <%= listing.price.toLocaleString("en-IN") %>/night<i class="tax-info">&nbsp; +17% GST</i>
                     </p>
+                  </div>
                 </div>
-             </div>
-            </a> 
+                </a>
+            </div>
         <% } %> 
     </div>
 
-    <script>
-        let taxSwitch = document.getElementById("switchCheckDefault");
-        taxSwitch.addEventListener("click", () => {
-            let taxInfoElements = document.getElementsByClassName("tax-info");
-            for(let elem of taxInfoElements){
-                if(elem.style.display === "none"){
-                    elem.style.display = "inline";
-                } else {
-                    elem.style.display = "none";
-                }
-            }
+<script>
+    let taxSwitch = document.getElementById("switchCheckDefault");
+
+taxSwitch.addEventListener("click", () => {
+    let taxInfoElements = document.querySelectorAll(".tax-info");
+
+    taxInfoElements.forEach(elem => {
+        if (elem.style.display === "inline") {
+            elem.style.display = "none";
+        } else {
+            elem.style.display = "inline";
+        }
+    });
+});
+
+    document.querySelectorAll(".heart-icon").forEach(icon => {
+        icon.addEventListener("click", function() {
+            this.classList.toggle("fa-solid");
+            this.classList.toggle("text-danger");
         });
-    </script>
+    });
+</script>

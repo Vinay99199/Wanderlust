@@ -26,47 +26,169 @@ body{
     background-color: white;
 }
 
-/* footer */
-.f-info-links a{
-    text-decoration: none;
-    color: #222222;
-}
-.f-info-links a :hover{
-    text-decoration: underline;
-}
-.f-info-links,
-.f-info-socials,
-.f-info-brand{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Footer */
+.footer {
+  background: #EBEBEB;
+  color: #222222;
+  padding: 60px 20px 30px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.f-info-socials i{
-    font-size: 1.2rem;
-    margin-right: 1rem;
+.footer-top {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
-.f-info{
-    text-align: center;
-    height: 8rem;
-    background-color: #ebebeb;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: space-evenly;
+.footer-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
 }
+
+.footer-col h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  border-left: 4px solid #fe424d;
+  padding-left: 10px;
+  color: #222222;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.footer-col a {
+  color: #555555;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-col a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+.footer-col img {
+  width: 140px;
+  margin-top: 10px;
+}
+
+
+.footer-rating {
+  text-align: center;
+  margin-top: 25px;
+}
+.rating-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #222222;
+}
+.trustpilot-logo {
+  width: 15rem;
+}
+
+
+.footer-social-contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 40px;
+  border-top: 1px solid #cccccc;
+  padding-top: 30px;
+  gap: 30px;
+}
+
+.footer-social h3,
+.footer-contact h3 {
+  margin-bottom: 10px;
+  color: #222222;
+}
+
+.social-icons a {
+  display: inline-block;
+  color: #222222;
+  margin-right: 12px;
+  font-size: 20px;
+  transition: transform 0.3s, color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #27b9a8;
+  background:#97979718 ;
+  border-radius: 5px;
+  /* transform: scale(1.2); */
+}
+
+.footer-contact p {
+  margin: 5px 0;
+  color: #555555;
+}
+
+.footer-contact i {
+  margin-right: 8px;
+  color: #fe424d;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #777777;
+}
+
+.footer-links {
+  margin-top: 8px;
+}
+
+.footer-links a {
+  color: #777777;
+  margin: 0 5px;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #000000;
+}
+
+.back-to-top {
+  margin-top: 20px;
+  background-color: #fe424d;
+  color: #ffffff;
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.back-to-top:hover {
+  background-color: #d73740;
+  color: #ffffff;
+}
+
 
 /* cards */
 .listing-card{
     border: none !important;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 .card-img-top{
     border-radius: 1rem !important;
     width: 100% !important;
     object-fit: cover !important;
+    height: 14rem;
 }
 .card-body{
     padding: 0 !important;
@@ -83,15 +205,33 @@ body{
     opacity: 0;
 }
 
-.card-img-overlay:hover{
-    opacity: 0.2;
+.card:hover .card-img-overlay{
+    opacity: 0.15;
     background-color:white;
+}
+@media (min-width: 768px){
+    .card-img-top{
+        height: 16rem;
+    }
+}
+/* laptop */
+@media (min-width: 992px){
+    .card-img-top{
+        height: 18rem;
+    }
+}
+/* large screen */
+@media (min-width: 1200px){
+    .card-img-top{
+        height: 20rem;
+    }
 }
 
 .add-btn{
     background-color:#fe424d !important ;
     border: none !important;
 }
+
 
 /* Edit Page */
 .edit-btn{
@@ -111,6 +251,15 @@ body{
 .show-card{
     padding-left: 0;
     padding-right: 0;
+}
+
+.heart-icon{
+    z-index: 1000;
+    color: rgb(99, 99, 99);
+    cursor: pointer;
+}
+.heart-icon:hover{
+    transform: scale(1.1);
 }
 
 /* Map */
