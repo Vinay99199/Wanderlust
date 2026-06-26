@@ -38,76 +38,80 @@
             cursor: pointer;
         }
     </style>
-
-
     <div id="filters">
-        <div class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
+        <div class="filter" data-filter="">
+            <div><i class="fa-solid fa-house"></i></div>
+            <p>All</p>
+        </div>
+        <div class="filter" data-filter="Trending">
+            <div><i class="fa-solid fa-fire"></i></div>
             <p>Trending</p>
         </div>
-        <div class="filter">
+    
+        <div class="filter" data-filter="Rooms">
             <div><i class="fa-solid fa-bed"></i></div>
             <p>Rooms</p>
         </div>
-        
-        <div class="filter">
+    
+        <div class="filter" data-filter="Iconic Cities">
             <div><i class="fa-solid fa-city"></i></div>
             <p>Iconic Cities</p>
         </div>
-
-        <div class="filter">
+    
+        <div class="filter" data-filter="Mountains">
             <div><i class="fa-solid fa-mountain"></i></div>
             <p>Mountains</p>
         </div>
-
-        <div class="filter">
+    
+        <div class="filter" data-filter="Castles">
             <div><i class="fa-solid fa-chess-rook"></i></div>
             <p>Castles</p>
         </div>
-
-        <div class="filter">
+    
+        <div class="filter" data-filter="Amazing Pools">
             <div><i class="fa-solid fa-water-ladder"></i></div>
             <p>Amazing Pools</p>
         </div>
-
-        <div class="filter">
+    
+        <div class="filter" data-filter="Camping">
             <div><i class="fa-solid fa-campground"></i></div>
             <p>Camping</p>
         </div>
-
-        <div class="filter">
+    
+        <div class="filter" data-filter="Farms">
             <div><i class="fa-solid fa-tractor"></i></div>
             <p>Farms</p>
         </div>
-
-        <div class="filter">
+    
+        <div class="filter" data-filter="Arctic">
             <div><i class="fa-solid fa-snowflake"></i></div>
             <p>Arctic</p>
         </div>
-
-        <div class="filter">
+    
+        <div class="filter" data-filter="Domes">
             <div><i class="fa-solid fa-igloo"></i></div>
             <p>Domes</p>
         </div>
-
-        <div class="filter">
+    
+        <div class="filter" data-filter="Boats">
             <div><i class="fa-solid fa-ship"></i></div>
             <p>Boats</p>
         </div>
-    
         <div class="tax-toggle">
-            <div class="form-check-reverse form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
-            </div>
+            <div class="form-check-reverse form-switch"> <input class="form-check-input" type="checkbox" role="switch"
+                    id="switchCheckDefault"> <label class="form-check-label" for="switchCheckDefault">Display total after
+                    taxes</label> </div>
         </div>
-    </div>
-    
+        </div>
 
     <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 g-2 mt-3">        
         <% for(let listing of allListings) { %> 
             <div class="col position-relative">
-                <i class="fa-regular fa-heart heart-icon position-absolute top-0 end-0 m-2 fs-5"></i>
+
+                <div class="heart-icon" data-id="<%= listing._id %>">
+                    <i class="<%= wishlist.includes(listing._id.toString()) ? 'fa-solid text-danger' : 'fa-regular' %> fa-heart"></i>
+                </div>
+
                 <a href="/listings/<%= listing._id %>" class="listing-link">
 
                 <div class="card listing-card">
@@ -126,24 +130,46 @@
     </div>
 
 <script>
-    let taxSwitch = document.getElementById("switchCheckDefault");
+        let taxSwitch = document.getElementById("switchCheckDefault");
 
-taxSwitch.addEventListener("click", () => {
-    let taxInfoElements = document.querySelectorAll(".tax-info");
+        taxSwitch.addEventListener("click", () => {
+            let taxInfoElements = document.querySelectorAll(".tax-info");
 
-    taxInfoElements.forEach(elem => {
-        if (elem.style.display === "inline") {
-            elem.style.display = "none";
-        } else {
-            elem.style.display = "inline";
-        }
-    });
-});
+            taxInfoElements.forEach(elem => {
+                if (elem.style.display === "inline") {
+                    elem.style.display = "none";
+                } else {
+                    elem.style.display = "inline";
+                }
+            });
+        });
 
     document.querySelectorAll(".heart-icon").forEach(icon => {
-        icon.addEventListener("click", function() {
-            this.classList.toggle("fa-solid");
-            this.classList.toggle("text-danger");
+        icon.addEventListener("click", async function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const listingId = this.dataset.id;
+            const response = await fetch(`/listings/${listingId}/wishlist`, {
+                method: "POST"
+            });
+            const data = await response.json();
+            if (data.success) {
+                let heart = this.querySelector("i");
+                heart.classList.toggle("fa-regular");
+                heart.classList.toggle("fa-solid");
+                heart.classList.toggle("text-danger");
+            }
+        });
+    });
+
+    document.querySelectorAll(".filter").forEach(filter => {
+        filter.addEventListener("click", () => {
+            const category = filter.dataset.filter;
+            if (category === "") {
+                window.location.href = "/listings";
+            } else {
+                window.location.href = `/listings?category=${encodeURIComponent(category)}`;
+            }
         });
     });
 </script>

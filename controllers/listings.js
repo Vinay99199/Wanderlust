@@ -1,11 +1,43 @@
 const Listing = require("../models/listing");
+const User = require("../models/user");
 const mbxTilesets = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxTilesets({ accessToken: mapToken });
 
-module.exports.index=async(req,res)=>{
-  const allListings = await Listing.find({});
-  res.render("listings/index.ejs",{allListings});
+module.exports.index = async (req, res) => {
+    const { category, q } = req.query;
+
+    let filter = {};
+
+    // Search
+    if (q && q.trim() !== "") {
+        filter.$or = [
+            { title: { $regex: q, $options: "i" } },
+            { description: { $regex: q, $options: "i" } },
+            { location: { $regex: q, $options: "i" } },
+            { country: { $regex: q, $options: "i" } },
+            { category: { $regex: q, $options: "i" } },
+        ];
+    }
+
+    // Category
+    if (category) {
+        filter.category = category;
+    }
+
+    const allListings = await Listing.find(filter);
+
+    let wishlist = [];
+
+    if (req.user) {
+        const user = await User.findById(req.user._id);
+        wishlist = user.wishlist.map(id => id.toString());
+    }
+
+    res.render("listings/index.ejs", {
+        allListings,
+        wishlist,
+    });
 };
 
 
@@ -75,6 +107,7 @@ module.exports.updateListing=async(req,res)=>{
   listing.image={url,filename};
   await listing.save();
   }
+
   req.flash("success","Listing Updated");
   res.redirect(`/listings/${id}`);
 };
@@ -85,4 +118,14 @@ module.exports.destroyListing=async (req, res) => {
   console.log(deletedListing);
   req.flash("success"," Listing Deleted");
   res.redirect("/listings");
+};
+
+module.exports.renderFavourites = async (req, res) => {
+    const user = await User.findById(req.user._id)
+        .populate("wishlist");
+
+    res.render("listings/favourites.ejs", {
+        allListings: user.wishlist,
+    });
+
 };

@@ -46,3 +46,32 @@ module.exports.logout= (req, res) => {
         res.redirect("/listings");
     });
 };
+
+module.exports.profile = async (req, res) => {
+    const user = await User.findById(req.user._id)
+        .populate("wishlist");
+
+    res.render("users/profile.ejs", { user });
+};
+
+module.exports.renderEditProfile = async (req, res) => {
+    const user = await User.findById(req.user._id);
+    res.render("users/editProfile.ejs", { user });
+};
+
+module.exports.updateProfile = async (req, res) => {
+    const { email, phone, bio, profileImage } = req.body;
+
+    await User.findByIdAndUpdate(req.user._id, {
+        email,
+        phone,
+        bio,
+        profileImage: {
+            url: profileImage,
+            filename: "",
+        },
+    });
+
+    req.flash("success", "Profile updated successfully!");
+    res.redirect("/profile");
+};

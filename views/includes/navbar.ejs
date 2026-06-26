@@ -1,107 +1,307 @@
+
 <style>
-/* navbar */
-.navbar {
-    height: 5rem;   
-    background-color: #fff !important;
-    padding: 0 1rem;
+/* ==========================
+   NAVBAR
+========================== */
+
+.navbar{
+    min-height:5rem;
+    background:#fff !important;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    padding:.6rem 1rem;
 }
 
-.navbar-brand i {
-    font-size: 2rem;
-    color: #fe424d;
+.navbar-brand i{
+    font-size:2rem;
+    color:#fe424d;
 }
 
-.nav-link {
-    font-size: 1rem;
-    color: #222 !important;
-    margin-right: 0.7rem;
-    transition: transform 0.3s, color 0.3s;
+.nav-link{
+    color:#222 !important;
+    margin-right:.5rem;
+    padding:.55rem .9rem;
+    border-radius:25px;
+    transition:.3s ease;
+    font-weight:500;
 }
 
-.nav-link:hover {
-  background: #dfdfdf82;
-  border-radius: 25px;
-    color: #000000 !important;
+.nav-link:hover{
+    background:#f3f3f3;
 }
 
-.navbar-nav {
-    align-items: center;
+.search-form{
+    width:100%;
+    max-width:430px;
 }
 
-.search-inp {
-    border-radius: 25px;
-    padding: 0.5rem 1.2rem;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    width: 250px;
+.search-inp{
+    border-radius:25px;
+    width:260px;
+    padding:.55rem 1rem;
 }
 
-/* .search-inp:hover {
-    border: 1px solid #c8333340;
-}
-.search-inp:focus {
-    outline: none;
-    border: 1px solid #5ee6f3;
-    box-shadow: 1px 1px 5px rgb(69, 215, 241);
-} */
-
-.search-btn {
-    background-color: #fe424d;
-    color: #fff;
-    border-radius: 25px;
-    padding: 0.5rem 1rem;
-    margin-left: 0.5rem;
-    display: flex;
-    align-items: center;
-    border: none;
-}
-.search-btn:hover {
-  color: #ededed;
-    background-color: #e03150;
+.search-btn{
+    border-radius:25px;
+    background:#fe424d;
+    color:#fff;
+    border:none;
+    padding:.55rem 1rem;
+    transition:.3s;
+    white-space:nowrap;
 }
 
-.search-btn i {
-    margin-right: 0.4rem;
+.search-btn:hover{
+    background:#e03150;
+    color:#fff;
 }
-.navbar {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+.search-btn i{
+    margin-right:5px;
+}
+
+.navbar-toggler{
+    border:none;
+    box-shadow:none !important;
+}
+
+.navbar-toggler:focus{
+    box-shadow:none;
+}
+
+/* ==========================
+   TABLET
+========================== */
+
+@media(max-width:992px){
+
+    .search-form{
+        max-width:300px;
+    }
+
+    .search-inp{
+        width:180px;
+    }
+
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media(max-width:768px){
+
+    .navbar{
+        padding:.8rem 1rem;
+    }
+
+    .navbar-collapse{
+        margin-top:15px;
+        background:#fff;
+        padding:15px;
+        border-radius:12px;
+        box-shadow:0 4px 12px rgba(0,0,0,.08);
+    }
+
+    .navbar-nav{
+        text-align:center;
+    }
+
+    .nav-item{
+        width:100%;
+    }
+
+    .nav-link{
+        display:block;
+        margin:6px 0;
+        padding:12px;
+    }
+
+    .search-form{
+        display:flex;
+        flex-direction:column;
+        width:100%;
+        margin:15px 0;
+    }
+
+    .search-inp{
+        width:100%;
+        margin:0 0 12px 0 !important;
+    }
+
+    .search-btn{
+        width:100%;
+    }
+
+}
+
+/* ==========================
+   SMALL MOBILE
+========================== */
+
+@media(max-width:480px){
+
+    .navbar{
+        padding:.7rem .8rem;
+    }
+
+    .navbar-brand i{
+        font-size:1.7rem;
+    }
+
+    .nav-link{
+        font-size:15px;
+        padding:10px;
+    }
+
+    .search-inp{
+        font-size:14px;
+        padding:10px 15px;
+    }
+
+    .search-btn{
+        font-size:14px;
+        padding:10px;
+    }
+
+}
+
+
+@media(max-width:360px){
+
+    .navbar-brand i{
+        font-size:1.5rem;
+    }
+
+    .nav-link{
+        font-size:14px;
+    }
+
+    .search-inp{
+        font-size:13px;
+    }
+
+    .search-btn{
+        font-size:13px;
+    }
+
 }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/listings">
-      <i class="fa-regular fa-compass"></i>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-      data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" 
-      aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a href="/listings" class="nav-link">Explore</a>
-      </div>
 
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-          <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations…">
-          <button class="btn search-btn" type="submit">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            Search</button>
-        </form>
-      </div>
+<nav class="navbar navbar-expand-md sticky-top">
+    <div class="container-fluid">
 
-      <div class="navbar-nav ms-auto">
-        <a href="/listings/new" class="nav-link">Airbnb your home</a>
-        <% if(!currUser){ %>
-        <a href="/signup" class="nav-link"><b>Sign up</b></a>
-        <a href="/login" class="nav-link"><b>Log in</b></a>
-        <% }%><% if(currUser) {%>
-        <a href="/logout" class="nav-link"><b>Log out</b></a>
-        <% } %>
+        <!-- Logo -->
+        <a class="navbar-brand" href="/listings">
+            <i class="fa-regular fa-compass"></i>
+        </a>
 
-      </div>
+        <!-- Toggle Button -->
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <!-- Left -->
+            <ul class="navbar-nav me-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/listings">
+                        Explore
+                    </a>
+                </li>
+
+            </ul>
+
+            <!-- Search -->
+            <form
+                class="d-flex search-form mx-auto"
+                action="/listings"
+                method="GET">
+
+                <input
+                    class="form-control search-inp me-md-2"
+                    type="search"
+                    name="q"
+                    placeholder="Search destinations..."
+                >
+
+                <button class="btn search-btn" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Search
+                </button>
+            </form>
+
+            <!-- Right -->
+            <ul class="navbar-nav ms-md-auto">
+
+                <li class="nav-item">
+                    <a href="/listings/new" class="nav-link">
+                        Airbnb your home
+                    </a>
+                </li>
+
+                <% if(!currUser){ %>
+                <li class="nav-item">
+                    <a href="/signup" class="nav-link">
+                        <strong>Sign Up</strong>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/login" class="nav-link">
+                        <strong>Log In</strong>
+                    </a>
+                </li>
+                <% } %>
+
+                <% if(currUser){ %>
+                
+                    <li class="nav-item">
+                        <a href="/listings/favourites" class="nav-link">
+                            <i class="fa-solid fa-heart text-danger"></i>
+                            Favourite
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/profile" class="nav-link">
+                            <i class="fa-solid fa-user text-dark"></i>
+                            Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/bookings/my" class="nav-link">
+                            <i class="fa-solid fa-calendar-check text-primary"></i>
+                            My Bookings
+                        </a>
+                    </li>
+                
+                    <li class="nav-item">
+                        <a href="/bookings/owner" class="nav-link">
+                            <i class="fa-solid fa-users text-success"></i>
+                            Received Bookings
+                        </a>
+                    </li>
+                
+                    <li class="nav-item">
+                        <a href="/logout" class="nav-link">
+                            <strong>Log Out</strong>
+                        </a>
+                    </li>
+                
+                    <% } %>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>

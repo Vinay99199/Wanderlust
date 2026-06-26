@@ -1,0 +1,48 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+
+        <div class="text-center">
+
+            <img
+                src="<%= user.profileImage?.url || 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>"
+                class="rounded-circle mb-3"
+                width="120"
+                height="120"
+            >
+
+            <h2><%= user.username %></h2>
+
+            <p><%= user.email %></p>
+
+        </div>
+
+        <hr>
+
+        <h5>Phone</h5>
+
+        <p><%= user.phone || "Not Added" %></p>
+
+        <h5>Bio</h5>
+
+        <p><%= user.bio || "No Bio Yet" %></p>
+
+        <h5>Joined On</h5>
+
+        <p>
+            <%= user.createdAt
+                ? user.createdAt.toDateString()
+                : "N/A" %>
+        </p>
+
+        <h5>Wishlist</h5>
+
+        <p><%= user.wishlist.length %> Listings</p>
+
+    </div>
+    <a href="/profile/edit" class="btn btn-dark mt-3 mb-3">
+    Edit Profile
+    </a>
+</div>
+

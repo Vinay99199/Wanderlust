@@ -1,0 +1,201 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">
+        <i class="fa-solid fa-calendar-check text-success"></i>
+        Received Bookings
+    </h2>
+
+    <% if(bookings.length === 0){ %>
+
+        <div class="alert alert-info">
+            No one has booked your listings yet.
+        </div>
+
+    <% } else { %>
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark text-center">
+
+                <tr>
+                    <th>Image</th>
+                    <th>Listing</th>
+                    <th>Guest</th>
+                    <th>Email</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Guests</th>
+                    <th>Total</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Booked On</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            <% bookings.forEach(booking => { %>
+
+                <tr>
+
+                    <!-- Image -->
+                    <td class="text-center">
+                        <% if(booking.listing.image){ %>
+
+                        <img
+                            src="<%= booking.listing.image.url %>"
+                            style="width:90px;height:70px;object-fit:cover;border-radius:8px;">
+
+                        <% } %>
+                    </td>
+
+                    <!-- Listing -->
+                    <td>
+                        <strong><%= booking.listing.title %></strong>
+                        <br>
+                        <small class="text-muted">
+                            <%= booking.listing.location %>,
+                            <%= booking.listing.country %>
+                        </small>
+                    </td>
+
+                    <!-- Guest -->
+                    <td>
+                        <%= booking.guest.username %>
+                    </td>
+
+                    <!-- Email -->
+                    <td>
+                        <%= booking.guest.email %>
+                    </td>
+
+                    <!-- CheckIn -->
+                    <td>
+                        <%= new Date(booking.checkIn).toLocaleDateString("en-IN") %>
+                    </td>
+
+                    <!-- CheckOut -->
+                    <td>
+                        <%= new Date(booking.checkOut).toLocaleDateString("en-IN") %>
+                    </td>
+
+                    <!-- Guests -->
+                    <td class="text-center">
+                        <%= booking.guests %>
+                    </td>
+
+                    <!-- Amount -->
+                    <td>
+                        ₹ <%= booking.totalPrice %>
+                    </td>
+
+                    <!-- Payment -->
+                    <td>
+                        <% if(booking.paymentStatus==="Paid"){ %>
+
+                            <span class="badge bg-success">
+                                Paid
+                            </span>
+
+                        <% } else if(booking.paymentStatus==="Refunded"){ %>
+                            <span class="badge bg-danger">
+                                Refunded
+                            </span>
+
+                        <% } else { %>
+
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+
+                        <% } %>
+
+                    </td>
+
+                    <!-- Booking Status -->
+                    <td>
+
+                        <% if(booking.bookingStatus==="Confirmed"){ %>
+
+                            <span class="badge bg-success">
+                                Confirmed
+                            </span>
+
+                        <% } else if(booking.bookingStatus==="Cancelled"){ %>
+
+                            <span class="badge bg-danger">
+                                Cancelled
+                            </span>
+
+                        <% } else if(booking.bookingStatus==="Completed"){ %>
+
+                            <span class="badge bg-primary">
+                                Completed
+                            </span>
+
+                        <% } else { %>
+
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+
+                        <% } %>
+
+                    </td>
+
+                    <!-- Booking Date -->
+                    <td>
+                        <%= new Date(booking.createdAt).toLocaleDateString("en-IN") %>
+                    </td>
+
+                    <!-- Action -->
+                    <td>
+                    
+                        <a href="/listings/<%= booking.listing._id %>" class="btn btn-primary btn-sm w-100 mb-2">
+                            View Listing
+                        </a>
+                    
+                        <% if(booking.bookingStatus==="Pending" ){ %>
+                            <form action="/bookings/<%= booking._id %>/status?_method=PUT" method="POST" class="mb-2">
+                    
+                                <input type="hidden" name="status" value="Confirmed">
+                                <button class="btn btn-success btn-sm w-100">
+                                    Confirm
+                                </button>
+
+                            </form>
+                    
+                            <form action="/bookings/<%= booking._id %>/status?_method=PUT" method="POST">
+                    
+                                <input type="hidden" name="status" value="Cancelled">
+                    
+                                <button class="btn btn-danger btn-sm w-100">
+                                    Cancel
+                                </button>
+                    
+                            </form>
+                    
+                            <% } %>
+                                <% if(booking.bookingStatus==="Confirmed" ){ %>
+                                    <form action="/bookings/<%= booking._id %>/status?_method=PUT" method="POST">
+                                        <input type="hidden" name="status" value="Completed">
+                                        <button class="btn btn-primary btn-sm w-100">
+                                            Complete
+                                        </button>
+                    
+                                    </form>
+                                    <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <% } %>
+</div>

@@ -1,0 +1,51 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">❤️ My Favourite Listings</h2>
+
+    <% if(allListings.length === 0){ %>
+
+        <h4>No Favourite Listings Yet!</h4>
+
+    <% } else { %>
+
+    <div class="row">
+        <% for(let listing of allListings){ %>
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+
+                <div class="card listing-card">
+
+                    <img
+                        src="<%= listing.image.url %>"
+                        class="card-img-top"
+                        alt="listing image"
+                    >
+
+                    <div class="card-body">
+
+                        <p class="card-text">
+
+                            <b><%= listing.title %></b><br>
+
+                            ₹ <%= listing.price.toLocaleString("en-IN") %> / night
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <% } %>
+
+    </div>
+
+    <% } %>
+
+</div>

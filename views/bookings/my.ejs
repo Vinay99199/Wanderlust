@@ -1,0 +1,93 @@
+<% layout("/layouts/boilerplate") %>
+<div class="container mt-4">
+    <h2 class="mb-4">My Bookings</h2>
+    <% if(bookings.length === 0){ %>
+        <div class="alert alert-info">
+            You have not booked any listing yet.
+        </div>
+
+    <% } else { %>
+        <div class="row">
+            <% bookings.forEach(booking => { %>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm border-0 rounded-4">
+                        <% if(booking.listing.image){ %>
+                            <img src="<%= booking.listing.image.url %>" 
+                                class="card-img-top rounded-top-4" style="height:250px; object-fit:cover;">
+                        <% } %>
+
+                        <div class="card-body  px-4 py-3">
+                            <h4>
+                                <%= booking.listing.title %>
+                            </h4>
+
+                            <p>
+                                <strong>Location:</strong>
+                                <%= booking.listing.location %>,
+                                <%= booking.listing.country %>
+                            </p>
+
+                            <p>
+                                <strong>Check In:</strong>
+                                <%= booking.checkIn.toDateString() %>
+                            </p>
+
+                            <p>
+                                <strong>Check Out:</strong>
+                                <%= booking.checkOut.toDateString() %>
+                            </p>
+
+                            <p>
+                                <strong>Guests:</strong>
+                                <%= booking.guests %>
+                            </p>
+
+                            <p>
+                                <strong>Nights:</strong>
+                                <%= booking.nights %>
+                            </p>
+
+                            <p>
+                                <strong>Total Price:</strong>
+                                ₹<%= booking.totalPrice %>
+                            </p>
+                            <p>
+                                <strong>Status:</strong>
+                            
+                                <% if (booking.bookingStatus==="Confirmed" ) { %>
+                                    <span class="badge bg-success">Confirmed</span>
+                            
+                                    <% } else if (booking.bookingStatus==="Completed" ) { %>
+                                        <span class="badge bg-primary">Completed</span>
+                            
+                                        <% } else if (booking.bookingStatus==="Cancelled" ) { %>
+                                            <span class="badge bg-danger">Cancelled</span>
+                            
+                                            <% } else { %>
+                                                <span class="badge bg-warning text-dark">Pending</span>
+                                                <% } %>
+                            </p>
+                            <div class="d-flex justify-content-between mt-3">
+                                <% if (booking.bookingStatus !=="Cancelled" && booking.bookingStatus !=="Completed" ) { %>
+                                
+                                    <form method="POST" action="/bookings/<%= booking._id %>?_method=DELETE">
+                                        <button class="btn btn-danger">
+                                            Cancel Booking
+                                        </button>
+                                    </form>
+                                
+                                    <% } %>
+                            
+                                <a href="/listings/<%= booking.listing._id %>" class="btn btn-primary">
+                                    View Listing
+                                </a>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</div>
+
