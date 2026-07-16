@@ -46,7 +46,7 @@
 
                     <!-- Image -->
                     <td class="text-center">
-                        <% if(booking.listing.image){ %>
+                        <% if(booking.listing && booking.listing.image){ %>
 
                         <img
                             src="<%= booking.listing.image.url %>"
