@@ -100,11 +100,13 @@ module.exports.cancelBooking = async (req, res) => {
 
 
 module.exports.ownerBookings = async (req, res) => {
-    const bookings = await Booking.find({
+    let bookings = await Booking.find({
         owner: req.user._id
     })
     .populate("listing")
     .populate("guest");
+
+    bookings = bookings.filter(b => b.listing);
 
     res.render("bookings/owner", { bookings });
 };
