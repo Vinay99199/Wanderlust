@@ -57,12 +57,20 @@
 
                     <!-- Listing -->
                     <td>
-                        <strong><%= booking.listing.title %></strong>
-                        <br>
-                        <small class="text-muted">
-                            <%= booking.listing.location %>,
-                            <%= booking.listing.country %>
-                        </small>
+                        <% if (booking.listing) { %>
+
+                            <strong><%= booking.listing.title %></strong>
+                            <br>
+                            <small class="text-muted">
+                                <%= booking.listing.location %>,
+                                <%= booking.listing.country %>
+                            </small>
+
+                        <% } else { %>
+
+                            <span class="text-danger">Listing Deleted</span>
+
+                        <% } %>
                     </td>
 
                     <!-- Guest -->
