@@ -11,7 +11,7 @@
             <% bookings.forEach(booking => { %>
                 <div class="col-md-6 mb-4">
                     <div class="card shadow-sm border-0 rounded-4">
-                        <% if(booking.listing.image){ %>
+                        <% if(booking.listing && booking.listing.image){ %>
                             <img src="<%= booking.listing.image.url %>" 
                                 class="card-img-top rounded-top-4" style="height:250px; object-fit:cover;">
                         <% } %>
