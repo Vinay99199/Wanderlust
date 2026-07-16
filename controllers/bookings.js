@@ -66,15 +66,13 @@ module.exports.createBooking = async (req, res) => {
 
 
 module.exports.myBookings = async (req, res) => {
-
-    const bookings = await Booking.find({
+    let bookings = await Booking.find({
         guest: req.user._id
     }).populate("listing");
 
-    res.render("bookings/my", {
-        bookings
-    });
+    bookings = bookings.filter(b => b.listing);
 
+    res.render("bookings/my", { bookings });
 };
 
 
