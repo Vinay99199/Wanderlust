@@ -165,9 +165,13 @@
                     <!-- Action -->
                     <td>
                     
-                        <a href="/listings/<%= booking.listing._id %>" class="btn btn-primary btn-sm w-100 mb-2">
-                            View Listing
-                        </a>
+                        <% if (booking.listing) { %>
+
+                            <a href="/listings/<%= booking.listing._id %>" class="btn btn-primary btn-sm w-100 mb-2">
+                                View Listing
+                            </a>
+
+                        <% } %>
                     
                         <% if(booking.bookingStatus==="Pending" ){ %>
                             <form action="/bookings/<%= booking._id %>/status?_method=PUT" method="POST" class="mb-2">
