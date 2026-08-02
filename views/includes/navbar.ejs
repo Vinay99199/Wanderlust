@@ -6,10 +6,6 @@
     padding:.6rem 1rem;
     z-index:1050;
 }
-.navbar-brand i{
-    font-size:2rem;
-    color:#fe424d;
-}
 .nav-link{
     color:#222 !important;
     margin-right:.5rem;
@@ -22,24 +18,21 @@
     background:#f3f3f3;
 }
 
-.logo{
-    width:42px;
-    height:42px;
-    object-fit:contain;
-    display:block;
-}
-
-.brand-name{
-    margin-left:10px;
-    font-size:1.45rem;
-    font-weight:700;
-    color:#222;
-    letter-spacing:.3px;
-}
-
 .navbar-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
     text-decoration:none;
 }
+
+.logo{
+    width:auto;
+    height:55px;
+    object-fit:contain;
+    display:block;
+    flex-shrink:0;
+}
+
 .search-form{
     width:100%;
     max-width:430px;
@@ -128,6 +121,9 @@
         margin:6px 0;
         padding:12px;
     }
+    .logo{
+        height:46px;
+    }
     .search-form{
         display:flex;
         flex-direction:column;
@@ -152,15 +148,13 @@
         padding:.7rem .8rem;
     }
 
-    .navbar-brand i{
-        font-size:1.7rem;
-    }
-
     .nav-link{
         font-size:15px;
         padding:10px;
     }
-
+    .logo{
+        height:40px;
+    }
     .search-inp{
         font-size:14px;
         padding:10px 15px;
@@ -173,10 +167,6 @@
 }
 
 @media(max-width:360px){
-    .navbar-brand i{
-        font-size:1.5rem;
-    }
-
     .nav-link{
         font-size:14px;
     }
@@ -196,11 +186,6 @@
 <nav class="navbar navbar-expand-md sticky-top">
     <div class="container-fluid">
 
-        <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="/listings">
-            <img src="https://res.cloudinary.com/dqbzv0bgw/image/upload/v1785666316/ChatGPT_Image_Aug_2_2026_03_52_00_PM_mndiaj.png" alt="Wanderlust Logo" class="logo">
-        </a>
-
         <!-- Toggle Button -->
         <button
             class="navbar-toggler"
@@ -218,16 +203,16 @@
         <!-- Menu -->
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            <!-- Left Menu -->
-            <ul class="navbar-nav me-auto">
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/listings">
-                        Explore
-                    </a>
-                </li>
-
-            </ul>
+            <!-- Brand -->
+        <div class="me-auto">
+            <a class="navbar-brand d-flex align-items-center brand-logo" href="/listings">
+                <img
+                    src="https://res.cloudinary.com/dqbzv0bgw/image/upload/v1785666316/ChatGPT_Image_Aug_2_2026_03_52_00_PM_mndiaj.png"
+                    alt="Wanderlust Logo"
+                    class="logo">
+       <!-- <span class="brand-name">WanderLust</span> -->
+    </a>
+</div>
 
             <!-- Search -->
             <form
