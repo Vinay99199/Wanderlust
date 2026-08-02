@@ -8,6 +8,7 @@ User Authentication,
 CRUD Listings,
 Image Uploads,
 Reviews & Ratings,
+Razorpay,
 
 🛠️Tech Stack:
 React, Node.js, Express, MongoDB
