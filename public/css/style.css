@@ -26,10 +26,7 @@ body{
     background-color: white;
 }
 
-/* =========================
-   FOOTER
-========================= */
-
+/* FOOTER */
 .footer{
     background:#1f1f1f;
     color:#fff;
@@ -166,10 +163,7 @@ body{
     word-wrap:break-word;
 }
 
-/* =========================
-   TABLET
-========================= */
-
+/* TABLET */
 @media (max-width:992px){
 
     .footer{
@@ -190,10 +184,7 @@ body{
     }
 }
 
-/* =========================
-   MOBILE
-========================= */
-
+/* MOBILE */
 @media (max-width:768px){
 
     .footer{
@@ -236,10 +227,7 @@ body{
     }
 }
 
-/* =========================
-   SMALL MOBILE
-========================= */
-
+/* SMALL MOBILE */
 @media (max-width:480px){
 
     .footer{
@@ -287,10 +275,8 @@ body{
     }
 }
 
-/* =========================
-   EXTRA SMALL DEVICES
-========================= */
 
+/*EXTRA SMALL DEVICES*/
 @media (max-width:360px){
 
     .footer{
