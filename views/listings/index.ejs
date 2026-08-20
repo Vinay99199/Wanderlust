@@ -96,10 +96,6 @@
             height: 16rem;
             object-fit: cover;
         }
-
-        .card-text {
-            overflow-wrap: anywhere;
-        }
     }
 
 
@@ -151,6 +147,89 @@
         }
 
     }
+    /* =========================
+   LISTINGS GRID
+   ========================= */
+
+.listings-row {
+    width: 100%;
+}
+
+.listings-row .col {
+    min-width: 0;
+}
+
+.listing-card {
+    width: 100%;
+}
+
+.listing-card img {
+    width: 100%;
+    height: 16rem;
+    object-fit: cover;
+}
+
+
+/* Desktop */
+
+@media (min-width: 992px) {
+
+    .listings-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+}
+
+
+/* Tablet */
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+    .listings-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 767px) {
+
+    .listings-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .listings-row .col {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .listing-card {
+        width: 100%;
+    }
+
+    .listing-card img {
+        width: 100%;
+        height: 16rem;
+        object-fit: cover;
+    }
+
+    .card-text {
+        font-size: 0.95rem;
+        overflow-wrap: normal;
+        word-break: normal;
+    }
+
+  }
   </style>
     <div id="filters">
         <div class="filter" data-filter="">
@@ -218,7 +297,7 @@
         </div>
         </div>
 
-    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 g-2 mt-3">        
+    <div class="row listings-row g-3 mt-3">        
         <% for(let listing of allListings) { %> 
             <div class="col position-relative">
 
