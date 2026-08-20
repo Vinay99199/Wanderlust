@@ -242,62 +242,81 @@
 
     <script src="/js/map.js"></script>
 
-    <script>
-        const payBtn = document.getElementById("payBtn");
-        if (payBtn) {
-            try {
-                payBtn.addEventListener("click", async () => {
-                 const response = await fetch("/bookings/<%= listing._id %>/create-order", {
+<script>
+const payBtn = document.getElementById("payBtn");
+if (payBtn) {
+    payBtn.addEventListener("click", async () => {
+        try {
+            const response = await fetch(
+                "/bookings/<%= listing._id %>/create-order",
+                {
                     method: "POST"
-                });
+                }
+            );
 
-                const order = await response.json();
-
-                const options = {
-                    key: "<%= process.env.RAZORPAY_KEY_ID %>",
-                    amount: order.amount,
-                    currency: order.currency,
-                    name: "Wanderlust",
-                    description: "Listing Booking",
-                    order_id: order.id,
-
-                    handler: async function (payment) {
-                        const verify = await fetch("/bookings/<%= listing._id %>/verify-payment", {
+            const order = await response.json();
+            const options = {
+                key: "<%= process.env.RAZORPAY_KEY_ID %>",
+                amount: order.amount,
+                currency: order.currency,
+                name: "Wanderlust",
+                description: "Listing Booking",
+                order_id: order.id,
+                handler: async function (payment) {
+                    const verify = await fetch(
+                        "/bookings/<%= listing._id %>/verify-payment",
+                        {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
                             },
                             body: JSON.stringify({
-                                razorpay_order_id: payment.razorpay_order_id,
-                                razorpay_payment_id: payment.razorpay_payment_id,
-                                razorpay_signature: payment.razorpay_signature,
-                                checkIn: document.getElementById("checkIn").value,
-                                checkOut: document.getElementById("checkOut").value,
-                                guests: document.getElementById("guests").value
+                                razorpay_order_id:
+                                    payment.razorpay_order_id,
+
+                                razorpay_payment_id:
+                                    payment.razorpay_payment_id,
+
+                                razorpay_signature:
+                                    payment.razorpay_signature,
+
+                                checkIn:
+                                    document.getElementById("checkIn").value,
+
+                                checkOut:
+                                    document.getElementById("checkOut").value,
+
+                                guests:
+                                    document.getElementById("guests").value
                             })
-                        });
-
-                        const result = await verify.json();
-
-                        if (result.success) {
-                            alert("Payment Successful & Booking Confirmed");
-                            window.location.href = "/bookings/my";
-                        } else {
-                            alert("Payment Verification Failed");
                         }
-                    },
+                    );
 
-                    theme: {
-                        color: "#fe424d"
+                    const result = await verify.json();
+                    if (result.success) {
+
+                        alert(
+                            "Payment Successful & Booking Confirmed"
+                        );
+                        window.location.href = "/bookings/my";
+                    } else {
+                        alert(
+                            "Payment Verification Failed"
+                        );
                     }
-                };
+                },
+                theme: {
+                    color: "#fe424d"
+                }
+            };
+            const rzp = new Razorpay(options);
+            rzp.open();
+        } catch (err) {
 
-                const rzp = new Razorpay(options);
-                rzp.open();
-            } catch (err) {
-                console.log(err);
-                alert("Order Creation Failed");
-            }
-        });
-     }
-    </script>
+            console.log(err);
+
+            alert("Order Creation Failed");
+        }
+    });
+  }
+</script>
