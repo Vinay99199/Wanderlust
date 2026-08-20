@@ -1,43 +1,157 @@
 <% layout("/layouts/boilerplate")%>
-    <style>
-        #filters{
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 1.5rem;
-        }
-        .filter{
-            text-align: center;
-            margin-right: 0;
-            margin-top: 2rem;
-            opacity: 0.8;
-        }
-        .filter:hover{
-            opacity: 1;
-            cursor: pointer;
-        }
-        .filter p{
-            font-size: 0.8rem;
+  <style>
+    #filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1.5rem;
+        width: 100%;
+    }
+
+    .filter {
+        text-align: center;
+        margin-right: 0;
+        margin-top: 2rem;
+        opacity: 0.8;
+        flex-shrink: 0;
+    }
+
+    .filter:hover {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .filter p {
+        font-size: 0.8rem;
+        margin-bottom: 0;
+    }
+
+    .tax-info {
+        display: none;
+    }
+
+    .tax-toggle {
+        border: 1px solid black;
+        text-align: center;
+        border-radius: 1rem;
+        height: 3.5rem;
+        padding: 1rem;
+        margin-left: 3rem;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    #switchCheckDefault {
+        cursor: pointer;
+    }
+
+
+    /* =========================
+       MOBILE / SMALL SCREEN
+       ========================= */
+
+    @media (max-width: 768px) {
+
+        #filters {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            gap: 1.3rem;
+            padding: 0 1rem 10px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
 
-        .tax-info{
+        /* Chrome / Edge / Safari */
+        #filters::-webkit-scrollbar {
             display: none;
         }
 
-        .tax-toggle{
-            border: 1px solid black;
-            text-align: center;
-            border-radius: 1rem;
-            height: 3.5rem;
-            padding: 1rem;
-            margin-left: 3rem;
-            display: flex;
-            align-items: center;
+        .filter {
+            flex: 0 0 auto;
+            margin-top: 1.3rem;
+            min-width: 55px;
         }
-        #switchCheckDefault{
-            cursor: pointer;
+
+        .filter p {
+            white-space: nowrap;
+            font-size: 0.75rem;
         }
-    </style>
+
+        .tax-toggle {
+            flex: 0 0 auto;
+            margin-left: 1rem;
+            margin-top: 1.3rem;
+            white-space: nowrap;
+        }
+
+        /* Cards mobile par screen ke andar rahenge */
+        .listing-card {
+            width: 100%;
+        }
+
+        .listing-card img {
+            width: 100%;
+            height: 16rem;
+            object-fit: cover;
+        }
+
+        .card-text {
+            overflow-wrap: anywhere;
+        }
+    }
+
+
+    /* Extra Small Screen */
+
+    @media (max-width: 480px) {
+
+        #filters {
+            gap: 1.1rem;
+            padding-left: 0.7rem;
+            padding-right: 0.7rem;
+        }
+
+        .filter {
+            min-width: 50px;
+        }
+
+        .filter p {
+            font-size: 0.7rem;
+        }
+
+        .tax-toggle {
+            margin-left: 0.5rem;
+            padding: 0.8rem;
+            font-size: 0.85rem;
+        }
+
+    }
+
+
+    /* Very Small Screen */
+
+    @media (max-width: 360px) {
+
+        #filters {
+            gap: 0.9rem;
+        }
+
+        .filter {
+            min-width: 45px;
+        }
+
+        .filter p {
+            font-size: 0.65rem;
+        }
+
+        .tax-toggle {
+            font-size: 0.75rem;
+        }
+
+    }
+  </style>
     <div id="filters">
         <div class="filter" data-filter="">
             <div><i class="fa-solid fa-house"></i></div>
