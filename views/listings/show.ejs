@@ -243,9 +243,11 @@
     <script src="/js/map.js"></script>
 
     <script>
-        document.getElementById("payBtn").addEventListener("click", async () => {
+        const payBtn = document.getElementById("payBtn");
+        if (payBtn) {
             try {
-                const response = await fetch("/bookings/<%= listing._id %>/create-order", {
+                payBtn.addEventListener("click", async () => {
+                 const response = await fetch("/bookings/<%= listing._id %>/create-order", {
                     method: "POST"
                 });
 
@@ -297,4 +299,5 @@
                 alert("Order Creation Failed");
             }
         });
+     }
     </script>
