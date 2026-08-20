@@ -7,25 +7,17 @@
     const listing = <%- JSON.stringify(listing) %>;
 </script>
 
-
 <div class="container mt-4">
 
-
-    <!-- =========================================================
-         ROW 1 : LISTING CARD + BOOKING CARD
-    ========================================================== -->
-
+    <!-- ROW 1: Listing Card (left) and Booking Card (right) -->
     <div class="row">
 
-
-        <!-- ================= LEFT : LISTING ================= -->
-
+        <!-- LEFT SIDE: Listing Card -->
         <div class="col-lg-8">
 
             <h2 class="mb-3 fw-bold">
                 <%= listing.title %>
             </h2>
-
 
             <div class="card listing-card border-0 shadow">
 
@@ -35,53 +27,34 @@
                     alt="listing image"
                 >
 
-
                 <!-- Card Content -->
-
                 <div class="card-body p-4">
 
                     <p class="mb-3">
-
                         <strong>Hosted by</strong>
-
                         <%= listing.owner.username %>
-
                     </p>
-
 
                     <p class="mb-4 leading-relaxed">
-
                         <%= listing.description %>
-
                     </p>
 
-
                     <h4 class="text-danger mb-3">
-
                         ₹<%= listing.price.toLocaleString("en-IN") %>
-
                         <small class="text-muted fs-6">
                             / night
                         </small>
-
                     </h4>
 
-
                     <p class="mb-0">
-
                         <i class="fa-solid fa-location-dot"></i>
-
                         <%= listing.location %>,
                         <%= listing.country %>
-
                     </p>
 
                 </div>
 
             </div>
-
-
-            <!-- ================= EDIT / DELETE ================= -->
 
             <% if(currUser && listing.owner._id.equals(currUser._id)){ %>
 
@@ -94,18 +67,13 @@
                         Edit
                     </a>
 
-
                     <form
                         method="POST"
                         action="/listings/<%= listing._id %>?_method=DELETE"
                     >
-
-                        <button
-                            class="btn btn-danger"
-                        >
+                        <button class="btn btn-danger">
                             Delete
                         </button>
-
                     </form>
 
                 </div>
@@ -114,649 +82,380 @@
 
         </div>
 
-
-
-        <!-- ================= RIGHT : BOOKING ================= -->
-
+        <!-- RIGHT SIDE: Booking Card OR Login Prompt -->
         <div class="col-lg-4">
-
 
             <% if(currUser){ %>
 
-
                 <% if(!listing.owner._id.equals(currUser._id)){ %>
 
+                <div
+                    class="card shadow"
+                    style="
+                    border-radius:18px;
+                    position:sticky;
+                    top:90px;
+                    "
+                >
 
-                    <div
-                        class="card shadow"
-                        style="
-                            border-radius:18px;
-                            position:sticky;
-                            top:90px;
-                        "
-                    >
+                    <div class="card-body">
 
+                        <h3 class="mb-3">
 
-                        <div class="card-body">
+                            ₹<%= listing.price.toLocaleString("en-IN") %>
 
+                            <small class="fs-6 text-muted">
+                                / night
+                            </small>
 
-                            <h3 class="mb-3">
+                        </h3>
 
-                                ₹<%= listing.price.toLocaleString("en-IN") %>
-
-                                <small class="fs-6 text-muted">
-                                    / night
-                                </small>
-
-                            </h3>
-
-
-
-                            <!-- BOOKING FORM -->
-
-                            <form id="bookingForm">
-
-
-                                <!-- CHECK IN -->
-
-                                <div class="mb-3">
-
-                                    <label class="form-label">
-                                        Check In
-                                    </label>
-
-
-                                    <input
-                                        type="date"
-                                        class="form-control"
-                                        name="checkIn"
-                                        id="checkIn"
-                                        required
-                                    >
-
-                                </div>
-
-
-
-                                <!-- CHECK OUT -->
-
-                                <div class="mb-3">
-
-                                    <label class="form-label">
-                                        Check Out
-                                    </label>
-
-
-                                    <input
-                                        type="date"
-                                        class="form-control"
-                                        name="checkOut"
-                                        id="checkOut"
-                                        required
-                                    >
-
-                                </div>
-
-
-
-                                <!-- GUESTS -->
-
-                                <div class="mb-3">
-
-                                    <label class="form-label">
-                                        Guests
-                                    </label>
-
-
-                                    <input
-                                        type="number"
-                                        class="form-control"
-                                        name="guests"
-                                        id="guests"
-                                        value="1"
-                                        min="1"
-                                        max="20"
-                                        required
-                                    >
-
-                                </div>
-
-
-
-                                <!-- PAYMENT BUTTON -->
-
-                                <button
-                                    type="button"
-                                    id="payBtn"
-                                    class="btn btn-danger w-100"
-                                >
-                                    Pay & Book
-                                </button>
-
-
-                            </form>
-
-                        </div>
+                        <form id="bookingForm">
+                        
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Check In
+                                </label>
+                        
+                                <input type="date" class="form-control" name="checkIn" id="checkIn" required>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Check Out
+                                </label>
+                        
+                                <input type="date" class="form-control" name="checkOut" id="checkOut" required>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Guests
+                                </label>
+                        
+                                <input type="number" class="form-control" name="guests" id="guests" value="1" min="1" max="20" required>
+                            </div>
+                        
+                            <button type="button" id="payBtn" class="btn btn-danger w-100">
+                                Pay & Book
+                            </button>
+                        
+                        </form>
 
                     </div>
 
+                </div>
 
                 <% } %>
 
-
             <% } else { %>
 
-
-                <!-- ================= LOGIN TO BOOK ================= -->
-
-                <div class="card shadow">
-
+                <div class="card shadow" style="position:sticky; top:90px;">
                     <div class="card-body text-center">
-
-
-                        <h5>
-                            Login to Book
-                        </h5>
-
-
+                        <h5>Login to Book</h5>
                         <a
                             href="/login"
                             class="btn btn-dark w-100 mt-3"
                         >
                             Login
                         </a>
-
-
                     </div>
-
                 </div>
-
 
             <% } %>
 
-
         </div>
 
-    </div>
-
-
-
-    <!-- =========================================================
-         ROW 2 : REVIEWS + MAP
-    ========================================================== -->
-
+    </div> <!-- /.row (ROW 1) -->
 
     <hr class="my-5">
 
-
+    <!-- ROW 2: Reviews (left) and Map (right) -->
     <div class="row mt-4">
 
-
-        <!-- ================= LEFT : REVIEW SECTION ================= -->
-
+        <!-- LEFT: Reviews -->
         <div class="col-lg-8">
-
 
             <% if(currUser){ %>
 
-
-                <hr>
-
-
-                <h3 class="mb-3">
-                    Leave a Review
-                </h3>
-
-
-
-                <!-- REVIEW FORM -->
-
-                <form
-                    method="POST"
-                    action="/listings/<%= listing._id %>/reviews"
-                    novalidate
-                    class="needs-validation"
-                >
-
-
-                    <!-- RATING -->
-
-                    <div class="mb-3">
-
-
-                        <label
-                            for="rating"
-                            class="form-label"
-                        >
-                            Rating
-                        </label>
-
-
-
-                        <fieldset class="starability-slot">
-
-
-                            <input
-                                type="radio"
-                                id="no-rate"
-                                class="input-no-rate"
-                                name="review[rating]"
-                                value="1"
-                                checked
-                            />
-
-
-                            <input
-                                type="radio"
-                                id="first-rate1"
-                                name="review[rating]"
-                                value="1"
-                            />
-
-                            <label for="first-rate1">
-                                1 star
-                            </label>
-
-
-
-                            <input
-                                type="radio"
-                                id="first-rate2"
-                                name="review[rating]"
-                                value="2"
-                            />
-
-                            <label for="first-rate2">
-                                2 stars
-                            </label>
-
-
-
-                            <input
-                                type="radio"
-                                id="first-rate3"
-                                name="review[rating]"
-                                value="3"
-                            />
-
-                            <label for="first-rate3">
-                                3 stars
-                            </label>
-
-
-
-                            <input
-                                type="radio"
-                                id="first-rate4"
-                                name="review[rating]"
-                                value="4"
-                            />
-
-                            <label for="first-rate4">
-                                4 stars
-                            </label>
-
-
-
-                            <input
-                                type="radio"
-                                id="first-rate5"
-                                name="review[rating]"
-                                value="5"
-                            />
-
-                            <label for="first-rate5">
-                                5 stars
-                            </label>
-
-
-                        </fieldset>
-
-                    </div>
-
-
-
-                    <!-- COMMENT -->
-
-                    <div class="mb-3">
-
-
-                        <label
-                            for="comment"
-                            class="form-label"
-                        >
-                            Comment
-                        </label>
-
-
-
-                        <textarea
-                            id="comment"
-                            rows="5"
-                            name="review[comment]"
-                            class="form-control"
-                            required
-                        ></textarea>
-
-
-
-                        <div class="invalid-feedback">
-                            Please enter your review.
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- SUBMIT REVIEW -->
-
-                    <button
-                        class="btn btn-outline-dark"
-                    >
-                        Submit Review
-                    </button>
-
-
-                </form>
-
-
-            <% } %>
-
-
-
             <hr>
 
+            <h3 class="mb-3">
+                Leave a Review
+            </h3>
 
+            <form
+                method="POST"
+                action="/listings/<%= listing._id %>/reviews"
+                novalidate
+                class="needs-validation"
+            >
 
-            <!-- ================= GUEST REVIEWS ================= -->
+                <div class="mb-3">
 
-            <% if(listing.reviews.length > 0){ %>
+                    <label
+                        for="rating"
+                        class="form-label"
+                    >
+                        Rating
+                    </label>
 
+                    <fieldset class="starability-slot">
 
-                <h3 class="mb-3">
-                    Guest Reviews
-                </h3>
+                        <input
+                            type="radio"
+                            id="no-rate"
+                            class="input-no-rate"
+                            name="review[rating]"
+                            value="1"
+                            checked
+                        />
 
+                        <input
+                            type="radio"
+                            id="first-rate1"
+                            name="review[rating]"
+                            value="1"
+                        />
+                        <label for="first-rate1">
+                            1 star
+                        </label>
 
+                        <input
+                            type="radio"
+                            id="first-rate2"
+                            name="review[rating]"
+                            value="2"
+                        />
+                        <label for="first-rate2">
+                            2 stars
+                        </label>
 
-                <div class="row">
+                        <input
+                            type="radio"
+                            id="first-rate3"
+                            name="review[rating]"
+                            value="3"
+                        />
+                        <label for="first-rate3">
+                            3 stars
+                        </label>
 
+                        <input
+                            type="radio"
+                            id="first-rate4"
+                            name="review[rating]"
+                            value="4"
+                        />
+                        <label for="first-rate4">
+                            4 stars
+                        </label>
 
-                    <% for(let review of listing.reviews){ %>
+                        <input
+                            type="radio"
+                            id="first-rate5"
+                            name="review[rating]"
+                            value="5"
+                        />
+                        <label for="first-rate5">
+                            5 stars
+                        </label>
 
-
-                        <div class="col-md-6 mb-4">
-
-
-                            <div class="card shadow-sm h-100">
-
-
-                                <div class="card-body">
-
-
-                                    <h5 class="card-title">
-
-                                        <%= review.author.username %>
-
-                                    </h5>
-
-
-
-                                    <!-- STAR RATING -->
-
-                                    <p
-                                        class="starability-result"
-                                        data-rating="<%= review.rating %>"
-                                    ></p>
-
-
-
-                                    <!-- COMMENT -->
-
-                                    <p>
-
-                                        <%= review.comment %>
-
-                                    </p>
-
-
-
-                                    <!-- DELETE REVIEW -->
-
-                                    <% if(currUser && review.author._id.equals(currUser._id)){ %>
-
-
-                                        <form
-                                            method="POST"
-                                            action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
-                                        >
-
-
-                                            <button
-                                                class="btn btn-sm btn-danger"
-                                            >
-                                                Delete Review
-                                            </button>
-
-
-                                        </form>
-
-
-                                    <% } %>
-
-
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
-
-                    <% } %>
-
+                    </fieldset>
 
                 </div>
 
+                <div class="mb-3">
+
+                    <label
+                        for="comment"
+                        class="form-label"
+                    >
+                        Comment
+                    </label>
+
+                    <textarea
+                        id="comment"
+                        rows="5"
+                        name="review[comment]"
+                        class="form-control"
+                        required
+                    ></textarea>
+
+                    <div class="invalid-feedback">
+                        Please enter your review.
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn btn-outline-dark"
+                >
+                    Submit Review
+                </button>
+
+            </form>
 
             <% } %>
 
+            <hr>
 
-        </div>
-
-
-
-        <!-- ================= RIGHT : MAP ================= -->
-
-        <div class="col-lg-4">
-
+            <% if(listing.reviews.length > 0){ %>
 
             <h3 class="mb-3">
-                Where You'll Be
+                Guest Reviews
             </h3>
 
+            <div class="row">
 
-            <div
-                id="map"
-                style="
-                    width:100%;
-                    height:500px;
-                    border-radius:12px;
-                "
-            ></div>
+                <% for(let review of listing.reviews){ %>
 
+                <div class="col-md-6 mb-4">
 
-        </div>
+                    <div class="card shadow-sm h-100">
 
+                        <div class="card-body">
 
-    </div>
+                            <h5 class="card-title">
+                                <%= review.author.username %>
+                            </h5>
 
+                            <p
+                                class="starability-result"
+                                data-rating="<%= review.rating %>"
+                            ></p>
 
-</div>
+                            <p>
+                                <%= review.comment %>
+                            </p>
 
+                            <% if(currUser && review.author._id.equals(currUser._id)){ %>
 
+                            <form
+                                method="POST"
+                                action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                            >
 
-<!-- =========================================================
-     MAP JAVASCRIPT
-========================================================== -->
+                                <button
+                                    class="btn btn-sm btn-danger"
+                                >
+                                    Delete Review
+                                </button>
+
+                            </form>
+
+                            <% } %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <% } %>
+
+            </div>
+
+            <% } %>
+
+        </div> <!-- /.col-lg-8 (Reviews) -->
+
+        <!-- RIGHT: Map -->
+        <div class="col-lg-4">
+
+            <div class="card shadow" style="border-radius:12px;">
+                <div class="card-body">
+                    <h3 class="mb-3">Where You'll Be</h3>
+                    <div id="map" style="height: 350px;"></div>
+                </div>
+            </div>
+
+        </div> <!-- /.col-lg-4 (Map) -->
+
+    </div> <!-- /.row (ROW 2) -->
+
+</div> <!-- /.container -->
 
 <script src="/js/map.js"></script>
 
-
-
-<!-- =========================================================
-     RAZORPAY PAYMENT
-========================================================== -->
-
 <script>
+document.getElementById("payBtn")?.addEventListener("click", async () => {
 
-const payBtn = document.getElementById("payBtn");
+    try {
 
+        const response = await fetch(
+            "/bookings/<%= listing._id %>/create-order",
+            {
+                method: "POST"
+            }
+        );
 
-if(payBtn){
+        const order = await response.json();
 
-    payBtn.addEventListener("click", async () => {
+        const options = {
+            key: "<%= process.env.RAZORPAY_KEY_ID %>",
+            amount: order.amount,
+            currency: order.currency,
+            name: "Wanderlust",
+            description: "Listing Booking",
+            order_id: order.id,
 
+            handler: async function (payment) {
 
-        try {
+                const verify = await fetch(
+                    "/bookings/<%= listing._id %>/verify-payment",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
 
+                        body: JSON.stringify({
 
-            /* ================= CREATE ORDER ================= */
+                            razorpay_order_id: payment.razorpay_order_id,
+                            razorpay_payment_id: payment.razorpay_payment_id,
+                            razorpay_signature: payment.razorpay_signature,
 
-            const response = await fetch(
-                "/bookings/<%= listing._id %>/create-order",
-                {
-                    method: "POST"
-                }
-            );
+                            checkIn: document.getElementById("checkIn").value,
+                            checkOut: document.getElementById("checkOut").value,
+                            guests: document.getElementById("guests").value
 
-
-            const order = await response.json();
-
-
-
-            /* ================= RAZORPAY OPTIONS ================= */
-
-            const options = {
-
-                key: "<%= process.env.RAZORPAY_KEY_ID %>",
-
-                amount: order.amount,
-
-                currency: order.currency,
-
-                name: "Wanderlust",
-
-                description: "Listing Booking",
-
-                order_id: order.id,
-
-
-                /* ================= PAYMENT SUCCESS ================= */
-
-                handler: async function(payment){
-
-
-                    const verify = await fetch(
-                        "/bookings/<%= listing._id %>/verify-payment",
-                        {
-
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-
-
-                            body: JSON.stringify({
-
-                                razorpay_order_id:
-                                    payment.razorpay_order_id,
-
-                                razorpay_payment_id:
-                                    payment.razorpay_payment_id,
-
-                                razorpay_signature:
-                                    payment.razorpay_signature,
-
-
-                                checkIn:
-                                    document.getElementById("checkIn").value,
-
-                                checkOut:
-                                    document.getElementById("checkOut").value,
-
-                                guests:
-                                    document.getElementById("guests").value
-
-                            })
-
-                        }
-                    );
-
-
-
-                    const result = await verify.json();
-
-
-
-                    if(result.success){
-
-
-                        alert(
-                            "Payment Successful & Booking Confirmed"
-                        );
-
-
-                        window.location.href =
-                            "/bookings/my";
-
-
-                    }else{
-
-
-                        alert(
-                            "Payment Verification Failed"
-                        );
-
-
+                        })
                     }
+                );
 
-                },
+                const result = await verify.json();
 
+                if(result.success){
 
-                /* ================= RAZORPAY THEME ================= */
+                    alert("Payment Successful & Booking Confirmed");
 
-                theme: {
-                    color: "#fe424d"
+                    window.location.href="/bookings/my";
+
+                }else{
+
+                    alert("Payment Verification Failed");
+
                 }
 
-            };
+            },
 
+            theme:{
+                color:"#fe424d"
+            }
 
+        };
 
-            /* ================= OPEN RAZORPAY ================= */
+        const rzp = new Razorpay(options);
 
-            const rzp = new Razorpay(options);
+        rzp.open();
 
-            rzp.open();
+    } catch(err){
 
+        console.log(err);
+        alert("Order Creation Failed");
 
-        } catch(err){
+    }
 
-
-            console.log(err);
-
-            alert(
-                "Order Creation Failed"
-            );
-
-
-        }
-
-    });
-
-}
-
+});
 </script>
