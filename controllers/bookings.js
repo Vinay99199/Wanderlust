@@ -4,63 +4,102 @@ const Listing = require("../models/listing");
 const razorpay = require("../utils/razorpay");
 
 // Create Booking
-module.exports.createBooking = async (req, res) => {
+module.exports.createOrder = async (req, res) => {
     try {
-        const { listingId } = req.params;
-        const {
-            checkIn,
-            checkOut,
-            guests
-        } = req.body;
+        console.log("Create Order Hit");
 
+        const { listingId } = req.params;
+        const { checkIn, checkOut, guests } = req.body;
+
+        // Listing check
         const listing = await Listing.findById(listingId);
 
         if (!listing) {
-            req.flash("error", "Listing not found.");
-            return res.redirect("/listings");
+            return res.status(404).json({
+                success: false,
+                message: "Listing not found"
+            });
         }
 
         // Owner apni listing book nahi kar sakta
         if (listing.owner.equals(req.user._id)) {
-            req.flash("error", "You cannot book your own listing.");
-            return res.redirect(`/listings/${listingId}`);
+            return res.status(400).json({
+                success: false,
+                message: "You cannot book your own listing."
+            });
+        }
+
+        // Date check
+        if (!checkIn || !checkOut) {
+            return res.status(400).json({
+                success: false,
+                message: "Please select Check In and Check Out dates."
+            });
         }
 
         const inDate = new Date(checkIn);
         const outDate = new Date(checkOut);
 
-        const nights = Math.ceil(
-            (outDate - inDate) / (1000 * 60 * 60 * 24)
-        );
-
-        if (nights <= 0) {
-            req.flash("error", "Invalid booking dates.");
-            return res.redirect(`/listings/${listingId}`);
+        if (isNaN(inDate) || isNaN(outDate)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid booking dates."
+            });
         }
 
-        const totalPrice = nights * listing.price;
-        const booking = new Booking({
-            listing: listing._id,
-            guest: req.user._id,
-            owner: listing.owner,
-            checkIn: inDate,
-            checkOut: outDate,
-            guests,
-            nights,
-            pricePerNight: listing.price,
-            totalPrice
+        if (outDate <= inDate) {
+            return res.status(400).json({
+                success: false,
+                message: "Check Out must be after Check In."
+            });
+        }
+
+       
+        // IMPORTANT: ALREADY BOOKED DATE CHECK
+        const existingBooking = await Booking.findOne({
+            listing: listingId,
+
+            bookingStatus: {
+                $in: ["Pending", "Confirmed"]
+            },
+
+            checkIn: {
+                $lt: outDate
+            },
+
+            checkOut: {
+                $gt: inDate
+            }
         });
 
-        await booking.save();
+        if (existingBooking) {
+            return res.status(400).json({
+                success: false,
+                message: "This listing is already booked for these dates."
+            });
+        }
 
-        req.flash("success", "Booking successful!");
+        // RAZORPAY ORDER
+        const options = {
+            amount: listing.price * 100,
+            currency: "INR",
+            receipt: "receipt_" + Date.now()
+        };
 
-        res.redirect("/bookings/my");
+        const order = await razorpay.orders.create(options);
+
+        console.log("Order:", order);
+
+        res.json(order);
 
     } catch (err) {
-        console.log(err);
-        req.flash("error", "Booking failed.");
-        res.redirect("back");
+
+        console.log("RAZORPAY ERROR =>", err);
+
+        res.status(500).json({
+            success: false,
+            error: err.message
+        });
     }
 };
 
@@ -198,7 +237,9 @@ module.exports.createOrder = async (req, res) => {
 module.exports.verifyPayment = async (req, res) => {
 
     console.log(req.body);
+
     try {
+
         const {
             razorpay_order_id,
             razorpay_payment_id,
@@ -210,12 +251,23 @@ module.exports.verifyPayment = async (req, res) => {
 
         const { listingId } = req.params;
 
-        // ==========================
-        // Validate Dates
-        // ==========================
+        // BASIC DATE VALIDATION
+        if (!checkIn || !checkOut) {
+            return res.status(400).json({
+                success: false,
+                message: "Check In and Check Out dates are required."
+            });
+        }
 
         const inDate = new Date(checkIn);
         const outDate = new Date(checkOut);
+
+        if (isNaN(inDate) || isNaN(outDate)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid booking dates."
+            });
+        }
 
         const nights = Math.ceil(
             (outDate - inDate) / (1000 * 60 * 60 * 24)
@@ -228,11 +280,11 @@ module.exports.verifyPayment = async (req, res) => {
             });
         }
 
-        // ==========================
-        // Verify Razorpay Signature
-        // ==========================
-
-        const body = razorpay_order_id + "|" + razorpay_payment_id;
+        // VERIFY RAZORPAY PAYMENT
+        const body =
+            razorpay_order_id +
+            "|" +
+            razorpay_payment_id;
 
         const expectedSignature = crypto
             .createHmac(
@@ -248,13 +300,10 @@ module.exports.verifyPayment = async (req, res) => {
                 success: false,
                 message: "Payment Verification Failed"
             });
-
         }
 
-        // ==========================
-        // Find Listing
-        // ==========================
-
+    
+        // LISTING CHECK
         const listing = await Listing.findById(listingId);
 
         if (!listing) {
@@ -266,29 +315,51 @@ module.exports.verifyPayment = async (req, res) => {
 
         }
 
+        // Owner apni listing book nahi kar sakta
+        if (listing.owner.equals(req.user._id)) {
+
+            return res.status(400).json({
+                success: false,
+                message: "You cannot book your own listing."
+            });
+
+        }
+
+        // FINAL AVAILABILITY CHECK
+        const existingBooking = await Booking.findOne({
+            listing: listingId,
+            bookingStatus: {
+                $in: ["Pending", "Confirmed"]
+            },
+            checkIn: {
+                $lt: outDate
+            },
+            checkOut: {
+                $gt: inDate
+            }
+        });
+        if (existingBooking) {
+            return res.status(400).json({
+                success: false,
+                message: "Sorry! These dates have already been booked."
+            });
+
+        }
+
+        // CREATE BOOKING
         const totalPrice = nights * listing.price;
-
-        // ==========================
-        // Save Booking
-        // ==========================
-
         const booking = new Booking({
-
             listing: listing._id,
             guest: req.user._id,
             owner: listing.owner,
-
             checkIn: inDate,
             checkOut: outDate,
             guests,
-
             nights,
             pricePerNight: listing.price,
             totalPrice,
-
             bookingStatus: "Pending",
             paymentStatus: "Paid",
-
             razorpayOrderId: razorpay_order_id,
             razorpayPaymentId: razorpay_payment_id,
             razorpaySignature: razorpay_signature
@@ -296,21 +367,16 @@ module.exports.verifyPayment = async (req, res) => {
         });
 
         await booking.save();
-
         return res.json({
             success: true,
-            message: "Payment Verified"
+            message: "Payment Verified & Booking Created"
         });
-
     } catch (err) {
-
         console.log(err);
-
         return res.status(500).json({
             success: false,
             message: "Server Error"
+
         });
-
     }
-
 };
