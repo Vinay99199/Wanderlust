@@ -244,79 +244,220 @@
 
 <script>
 const payBtn = document.getElementById("payBtn");
+
 if (payBtn) {
+
     payBtn.addEventListener("click", async () => {
+
         try {
+
+            // GET BOOKING DETAILS
+            const checkIn =
+                document.getElementById("checkIn").value;
+
+            const checkOut =
+                document.getElementById("checkOut").value;
+
+            const guests =
+                document.getElementById("guests").value;
+
+
+            // DATE VALIDATION
+            if (!checkIn || !checkOut) {
+
+                alert(
+                    "Please select Check In and Check Out dates."
+                );
+
+                return;
+            }
+
+
+            if (new Date(checkOut) <= new Date(checkIn)) {
+
+                alert(
+                    "Check Out must be after Check In."
+                );
+
+                return;
+            }
+
+
+          // CREATE RAZORPAY ORDER
             const response = await fetch(
                 "/bookings/<%= listing._id %>/create-order",
                 {
-                    method: "POST"
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        checkIn: checkIn,
+
+                        checkOut: checkOut,
+
+                        guests: guests
+
+                    })
                 }
             );
 
-            const order = await response.json();
+
+            // RESPONSE
+            const result = await response.json();
+
+
+            // BOOKING NOT AVAILABLE
+            if (!response.ok) {
+
+                alert(
+                    result.message ||
+                    "These dates are not available."
+                );
+
+                return;
+            }
+
+
+            // Razorpay order
+            const order = result;
+
+
+            // RAZORPAY OPTIONS
             const options = {
-                key: "<%= process.env.RAZORPAY_KEY_ID %>",
-                amount: order.amount,
-                currency: order.currency,
-                name: "Wanderlust",
-                description: "Listing Booking",
-                order_id: order.id,
+
+                key:
+                    "<%= process.env.RAZORPAY_KEY_ID %>",
+
+                amount:
+                    order.amount,
+
+                currency:
+                    order.currency,
+
+                name:
+                    "Wanderlust",
+
+                description:
+                    "Listing Booking",
+
+                order_id:
+                    order.id,
+
+
+                // PAYMENT SUCCESS
                 handler: async function (payment) {
-                    const verify = await fetch(
-                        "/bookings/<%= listing._id %>/verify-payment",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                razorpay_order_id:
-                                    payment.razorpay_order_id,
 
-                                razorpay_payment_id:
-                                    payment.razorpay_payment_id,
+                    try {
 
-                                razorpay_signature:
-                                    payment.razorpay_signature,
+                        const verify =
+                            await fetch(
+                                "/bookings/<%= listing._id %>/verify-payment",
+                                {
+                                    method: "POST",
 
-                                checkIn:
-                                    document.getElementById("checkIn").value,
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
 
-                                checkOut:
-                                    document.getElementById("checkOut").value,
+                                    body: JSON.stringify({
 
-                                guests:
-                                    document.getElementById("guests").value
-                            })
+                                        razorpay_order_id:
+                                            payment.razorpay_order_id,
+
+                                        razorpay_payment_id:
+                                            payment.razorpay_payment_id,
+
+                                        razorpay_signature:
+                                            payment.razorpay_signature,
+
+                                        checkIn:
+                                            checkIn,
+
+                                        checkOut:
+                                            checkOut,
+
+                                        guests:
+                                            guests
+
+                                    })
+                                }
+                            );
+
+
+                        const result =
+                            await verify.json();
+
+
+                        // PAYMENT + BOOKING SUCCESS
+                        if (result.success) {
+
+                            alert(
+                                "Payment Successful & Booking Confirmed"
+                            );
+
+                            window.location.href =
+                                "/bookings/my";
+
                         }
-                    );
 
-                    const result = await verify.json();
-                    if (result.success) {
+                        // PAYMENT VERIFIED BUT
+                        // DATE ALREADY BOOKED
+                        else {
+
+                            alert(
+                                result.message ||
+                                "Booking could not be completed."
+                            );
+
+                        }
+
+                    } catch (err) {
+
+                        console.log(
+                            "VERIFY ERROR =>",
+                            err
+                        );
 
                         alert(
-                            "Payment Successful & Booking Confirmed"
+                            "Payment verification failed."
                         );
-                        window.location.href = "/bookings/my";
-                    } else {
-                        alert(
-                            "Payment Verification Failed"
-                        );
+
                     }
+
                 },
+
+
+                // RAZORPAY THEME
                 theme: {
-                    color: "#fe424d"
+
+                    color:
+                        "#fe424d"
+
                 }
+
             };
-            const rzp = new Razorpay(options);
+
+
+            // OPEN RAZORPAY
+            const rzp =
+                new Razorpay(options);
             rzp.open();
         } catch (err) {
 
-            console.log(err);
+            console.log(
+                "CREATE ORDER ERROR =>",
+                err
+            );
 
-            alert("Order Creation Failed");
+            alert(
+                "Order Creation Failed"
+            );
         }
     });
-  }
-</script>
+}
+</script>ipt>
