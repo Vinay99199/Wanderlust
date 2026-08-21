@@ -25,18 +25,11 @@ router.post(
     bookingsController.createOrder
 );
 
-//Create order
+// Razorpay Payment Verify + Booking Create
 router.post(
     "/:listingId/verify-payment",
     isLoggedIn,
     bookingsController.verifyPayment
-);
-
-// Create Booking
-router.post(
-    "/:listingId",
-    isLoggedIn,
-    bookingsController.createBooking
 );
 
 // Owner Actions
