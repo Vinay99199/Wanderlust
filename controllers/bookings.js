@@ -204,35 +204,6 @@ module.exports.updateBookingStatus = async (req, res) => {
     res.redirect("/bookings/owner");
 };
 
-module.exports.createOrder = async (req, res) => {
-    try {
-        console.log("Create Order Hit");
-
-        const listing = await Listing.findById(req.params.listingId);
-
-        console.log("Listing:", listing);
-
-        const options = {
-            amount: listing.price * 100,
-            currency: "INR",
-            receipt: "receipt_" + Date.now(),
-        };
-
-        const order = await razorpay.orders.create(options);
-
-        console.log("Order:", order);
-
-        res.json(order);
-
-    } catch (err) {
-        console.log("RAZORPAY ERROR =>", err);
-
-        res.status(500).json({
-            success: false,
-            error: err.message
-        });
-    }
-};
 
 module.exports.verifyPayment = async (req, res) => {
 
