@@ -9,7 +9,7 @@ router.post("/subscribe", async (req, res) => {
     // Check email exists
     if (!email) {
       req.flash("error", "Email is required");
-      return res.redirect("/");
+      return res.redirect("/listings");
     }
 
     // Normalize email
@@ -20,7 +20,7 @@ router.post("/subscribe", async (req, res) => {
 
     if (!emailRegex.test(email)) {
       req.flash("error", "Please enter a valid email address");
-      return res.redirect("/");
+      return res.redirect("/listings");
     }
 
     // Check duplicate email
@@ -28,7 +28,7 @@ router.post("/subscribe", async (req, res) => {
 
     if (existing) {
       req.flash("error", "Already subscribed!");
-      return res.redirect("/");
+      return res.redirect("/listings");
     }
 
     // Save subscriber
@@ -36,7 +36,7 @@ router.post("/subscribe", async (req, res) => {
 
     req.flash("success", "Subscribed successfully!");
 
-    return res.redirect("/");
+    return res.redirect("/listings");
 
   } catch (err) {
     console.error("Newsletter Error:", err);
@@ -44,11 +44,11 @@ router.post("/subscribe", async (req, res) => {
     // MongoDB duplicate key error
     if (err.code === 11000) {
       req.flash("error", "Already subscribed!");
-      return res.redirect("/");
+      return res.redirect("/listings");
     }
 
     req.flash("error", "Something went wrong");
-    return res.redirect("/");
+    return res.redirect("/listings");
   }
 });
 
