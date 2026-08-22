@@ -19,6 +19,7 @@ const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const newsletterRoutes = require("./routes/newsletter");
 const bookingRoutes = require("./routes/bookings");
+const supportRouter = require("./routes/support");
 const dbUrl = process.env.ATLASDB_URL;
 
 main()
@@ -96,11 +97,11 @@ app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 app.use("/", newsletterRoutes);
 app.use("/bookings", bookingRoutes);
-
+app.use("/", supportRouter);
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });
-
+ 
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = "Something went wrong!" } = err;
   res.status(statusCode).render("error.ejs", { message });

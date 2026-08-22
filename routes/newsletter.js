@@ -6,7 +6,7 @@ router.post("/subscribe", async (req, res) => {
   try {
     let { email } = req.body;
 
-    // Email validation
+    // Check email exists
     if (!email) {
       req.flash("error", "Email is required");
       return res.redirect("/");
@@ -15,31 +15,33 @@ router.post("/subscribe", async (req, res) => {
     // Normalize email
     email = email.trim().toLowerCase();
 
-    console.log("Submitted Email:", email);
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Check duplicate
+    if (!emailRegex.test(email)) {
+      req.flash("error", "Please enter a valid email address");
+      return res.redirect("/");
+    }
+
+    // Check duplicate email
     const existing = await Newsletter.findOne({ email });
 
-    console.log("Existing:", existing);
-
     if (existing) {
-      console.log("Duplicate Found");
       req.flash("error", "Already subscribed!");
       return res.redirect("/");
     }
 
-    // Save email
-    const subscriber = await Newsletter.create({ email });
-
-    console.log("Saved:", subscriber);
+    // Save subscriber
+    await Newsletter.create({ email });
 
     req.flash("success", "Subscribed successfully!");
+
     return res.redirect("/");
 
   } catch (err) {
-    console.error(err);
+    console.error("Newsletter Error:", err);
 
-    // Handle Mongo duplicate error
+    // MongoDB duplicate key error
     if (err.code === 11000) {
       req.flash("error", "Already subscribed!");
       return res.redirect("/");

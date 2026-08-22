@@ -47,7 +47,7 @@
     }
 
 
-      // MOBILE / SMALL SCREEN
+       /* MOBILE / SMALL SCREEN */
     @media (max-width: 768px) {
 
         #filters {
@@ -145,17 +145,14 @@
 
     }
 
-// LISTINGS GRID
+ /* LISTINGS GRID */
 .listings-row {
     width: 100%;
 }
 
-.listings-row .col {
-    min-width: 0;
-}
-
 .listing-card {
     width: 100%;
+    border: none !important;
 }
 
 .listing-card img {
@@ -164,33 +161,20 @@
     object-fit: cover;
 }
 
-
-/* Desktop */
-
-@media (min-width: 992px) {
-
-    .listings-row {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-    }
+.listings-row .col {
+    min-width: 0;
 }
 
-
-/* Tablet */
-@media (min-width: 768px) and (max-width: 991px) {
-
-    .listings-row {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-    }
+.card-text {
+    overflow-wrap: normal;
+    word-break: normal;
 }
+
 
 /* Mobile */
 @media (max-width: 767px) {
 
     .listings-row {
-        display: grid;
-        grid-template-columns: 1fr;
         width: 100%;
         margin-left: 0;
         margin-right: 0;
@@ -199,8 +183,6 @@
     .listings-row .col {
         width: 100%;
         max-width: 100%;
-        padding-left: 0;
-        padding-right: 0;
     }
 
     .listing-card {
@@ -213,13 +195,38 @@
         object-fit: cover;
     }
 
-    .card-text {
-        font-size: 0.95rem;
-        overflow-wrap: normal;
-        word-break: normal;
+}
+
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+
+    .listing-card img {
+        height: 16rem;
     }
 
-  }
+}
+
+
+/* Desktop */
+@media (min-width: 992px) {
+
+    .listing-card img {
+        height: 18rem;
+    }
+
+}
+
+
+/* Large Desktop */
+@media (min-width: 1200px) {
+
+    .listing-card img {
+        height: 20rem;
+    }
+
+}
+
   </style>
     <div id="filters">
         <div class="filter" data-filter="">
@@ -289,7 +296,7 @@
 
     <div class="row listings-row g-3 mt-3">        
         <% for(let listing of allListings) { %> 
-            <div class="col position-relative">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 position-relative">
 
                 <div class="heart-icon" data-id="<%= listing._id %>">
                     <i class="<%= wishlist.includes(listing._id.toString()) ? 'fa-solid text-danger' : 'fa-regular' %> fa-heart"></i>
@@ -298,7 +305,7 @@
                 <a href="/listings/<%= listing._id %>" class="listing-link">
 
                 <div class="card listing-card">
-                    <img src="<%= listing.image.url %>"class="card-img-top"style="height:16rem; object-fit:cover;">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>">
                   <div class="card-img-overlay"></div>
                   <div class="card-body">
                     <p class="card-text">

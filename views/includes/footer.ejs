@@ -29,23 +29,23 @@
     <!-- Support -->
     <div class="footer-box">
       <h3>Support</h3>
-      <a href="#">Help Center</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms & Conditions</a>
-      <a href="#">Contact Us</a>
+      <a href="/help">Help Center</a>
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/terms">Terms & Conditions</a>
+      <a href="/contact">Contact Us</a>
     </div>
 
     <!-- Newsletter -->
     <div class="footer-box">
       <h3>Newsletter</h3>
       <p>Get the latest offers and travel updates.</p>
-
-      <form class="newsletter">
-        <input type="email" placeholder="Enter your email">
-        <button>Subscribe</button>
+    
+      <form class="newsletter" action="/subscribe" method="POST">
+        <input type="email" name="email" placeholder="Enter your email" required>
+    
+        <button type="submit">Subscribe</button>
       </form>
     </div>
-
   </div>
 
   <div class="footer-bottom">

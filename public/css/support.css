@@ -1,0 +1,247 @@
+
+.support-page {
+    max-width: 1000px;
+    margin: 50px auto 70px;
+    padding: 0 20px;
+}
+
+/* Main Card */
+.support-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 45px 50px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #eee;
+}
+
+/* Header */
+.support-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.support-header .support-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #ff385c;
+    color: white;
+
+    font-size: 27px;
+}
+
+.support-header h1 {
+    margin: 0 0 12px;
+    font-size: 38px;
+    font-weight: 700;
+    color: #222;
+}
+
+.support-header p {
+    max-width: 650px;
+    margin: 0 auto;
+    color: #717171;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* Section */
+.support-section {
+    margin-top: 30px;
+}
+
+.support-section h2 {
+    font-size: 25px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+.support-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.support-section p {
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+/* Help FAQ cards */
+.help-item {
+    padding: 22px 24px;
+    margin-bottom: 16px;
+
+    border: 1px solid #eee;
+    border-radius: 14px;
+
+    background: #fff;
+
+    transition: 0.2s ease;
+}
+
+.help-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+}
+
+.help-item h3 {
+    margin: 0 0 8px;
+}
+
+.help-item p {
+    margin: 0;
+}
+
+/* Links */
+.support-page a {
+    color: #ff385c;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.support-page a:hover {
+    text-decoration: underline;
+}
+
+/* Privacy / Terms */
+.policy-section {
+    margin-bottom: 30px;
+}
+
+.policy-section h2 {
+    font-size: 21px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.policy-section p {
+    color: #666;
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* Contact Form */
+.contact-form {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 13px 15px;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #ff385c;
+    box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+/* Contact button */
+.support-btn {
+    border: none;
+    background: #ff385c;
+    color: white;
+
+    padding: 13px 28px;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.support-btn:hover {
+    background: #e31c5f;
+    transform: translateY(-1px);
+}
+
+/* Bottom contact box */
+.support-contact-box {
+    margin-top: 35px;
+    padding: 25px;
+
+    text-align: center;
+
+    background: #fff5f7;
+    border-radius: 14px;
+}
+
+.support-contact-box h3 {
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+
+.support-contact-box p {
+    margin: 0;
+    color: #666;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .support-page {
+        margin: 30px auto 50px;
+        padding: 0 12px;
+    }
+
+    .support-card {
+        padding: 30px 22px;
+        border-radius: 15px;
+    }
+
+    .support-header h1 {
+        font-size: 30px;
+    }
+
+    .support-header p {
+        font-size: 14px;
+    }
+
+    .support-section h2 {
+        font-size: 22px;
+    }
+}

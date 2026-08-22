@@ -321,6 +321,7 @@ body{
 .listing-card{
     border: none !important;
     margin-bottom: 1.5rem;
+    position: relative;
 }
 .card-img-top{
     border-radius: 1rem !important;
@@ -391,24 +392,20 @@ body{
     padding-right: 0;
 }
 
-.heart-icon{
+.heart-icon {
     position: absolute;
-    top: 6px;
-    right: 11px;
-
+    top: 10px;
+    right: 15px;
     width: 40px;
     height: 40px;
-
     background: #fff;
     border-radius: 50%;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     box-shadow: 0 3px 10px rgba(0,0,0,.2);
     cursor: pointer;
-    z-index: 1000;
+    z-index: 10;
 }
 
 .heart-icon i{
