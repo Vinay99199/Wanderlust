@@ -180,6 +180,11 @@
         margin-right: 0;
     }
 
+    .listings-row .col {
+        width: 100%;
+        max-width: 100%;
+    }
+
     .listing-card {
         width: 100%;
     }
@@ -223,124 +228,96 @@
 }
 
 </style>
-
-<div id="filters">
-    <div class="filter" data-filter="">
-        <div><i class="fa-solid fa-house"></i></div>
-        <p>All</p>
-    </div>
-
-    <div class="filter" data-filter="Trending">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
-    </div>
-
-    <div class="filter" data-filter="Rooms">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
-    </div>
-
-    <div class="filter" data-filter="Iconic Cities">
-        <div><i class="fa-solid fa-city"></i></div>
-        <p>Iconic Cities</p>
-    </div>
-
-    <div class="filter" data-filter="Mountains">
-        <div><i class="fa-solid fa-mountain"></i></div>
-        <p>Mountains</p>
-    </div>
-
-    <div class="filter" data-filter="Castles">
-        <div><i class="fa-solid fa-chess-rook"></i></div>
-        <p>Castles</p>
-    </div>
-
-    <div class="filter" data-filter="Amazing Pools">
-        <div><i class="fa-solid fa-water-ladder"></i></div>
-        <p>Amazing Pools</p>
-    </div>
-
-    <div class="filter" data-filter="Camping">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
-    </div>
-
-    <div class="filter" data-filter="Farms">
-        <div><i class="fa-solid fa-tractor"></i></div>
-        <p>Farms</p>
-    </div>
-
-    <div class="filter" data-filter="Arctic">
-        <div><i class="fa-solid fa-snowflake"></i></div>
-        <p>Arctic</p>
-    </div>
-
-    <div class="filter" data-filter="Domes">
-        <div><i class="fa-solid fa-igloo"></i></div>
-        <p>Domes</p>
-    </div>
-
-    <div class="filter" data-filter="Boats">
-        <div><i class="fa-solid fa-ship"></i></div>
-        <p>Boats</p>
-    </div>
-
-    <div class="tax-toggle">
-        <div class="form-check-reverse form-switch">
-            <input
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="switchCheckDefault"
-            >
-            <label class="form-check-label" for="switchCheckDefault">
-                Display total after taxes
-            </label>
+    <div id="filters">
+        <div class="filter" data-filter="">
+            <div><i class="fa-solid fa-house"></i></div>
+            <p>All</p>
         </div>
-    </div>
-</div>
+        <div class="filter" data-filter="Trending">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+        </div>
+    
+        <div class="filter" data-filter="Rooms">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </div>
+    
+        <div class="filter" data-filter="Iconic Cities">
+            <div><i class="fa-solid fa-city"></i></div>
+            <p>Iconic Cities</p>
+        </div>
+    
+        <div class="filter" data-filter="Mountains">
+            <div><i class="fa-solid fa-mountain"></i></div>
+            <p>Mountains</p>
+        </div>
+    
+        <div class="filter" data-filter="Castles">
+            <div><i class="fa-solid fa-chess-rook"></i></div>
+            <p>Castles</p>
+        </div>
+    
+        <div class="filter" data-filter="Amazing Pools">
+            <div><i class="fa-solid fa-water-ladder"></i></div>
+            <p>Amazing Pools</p>
+        </div>
+    
+        <div class="filter" data-filter="Camping">
+            <div><i class="fa-solid fa-campground"></i></div>
+            <p>Camping</p>
+        </div>
+    
+        <div class="filter" data-filter="Farms">
+            <div><i class="fa-solid fa-tractor"></i></div>
+            <p>Farms</p>
+        </div>
+    
+        <div class="filter" data-filter="Arctic">
+            <div><i class="fa-solid fa-snowflake"></i></div>
+            <p>Arctic</p>
+        </div>
+    
+        <div class="filter" data-filter="Domes">
+            <div><i class="fa-solid fa-igloo"></i></div>
+            <p>Domes</p>
+        </div>
+    
+        <div class="filter" data-filter="Boats">
+            <div><i class="fa-solid fa-ship"></i></div>
+            <p>Boats</p>
+        </div>
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch"> <input class="form-check-input" type="checkbox" role="switch"
+                    id="switchCheckDefault"> <label class="form-check-label" for="switchCheckDefault">Display total after
+                    taxes</label> </div>
+        </div>
+        </div>
 
+    <div class="row listings-row g-3 mt-3">        
+        <% for(let listing of allListings) { %> 
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 position-relative">
 
-<!-- LISTINGS -->
-<div class="row listings-row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3 mt-3">
-
-    <% for(let listing of allListings) { %>
-
-        <div class="col position-relative">
-
-            <div class="heart-icon" data-id="<%= listing._id %>">
-                <i class="<%= wishlist.includes(listing._id.toString()) ? 'fa-solid text-danger' : 'fa-regular' %> fa-heart"></i>
-            </div>
-
-            <a href="/listings/<%= listing._id %>" class="listing-link">
-
-                <div class="card listing-card">
-
-                    <img
-                        src="<%= listing.image.url %>"
-                        class="card-img-top"
-                        alt="<%= listing.title %>"
-                    >
-
-                    <div class="card-img-overlay"></div>
-
-                    <div class="card-body">
-                        <p class="card-text">
-                            <b><%= listing.title %></b><br>
-                            ₹ <%= listing.price.toLocaleString("en-IN") %>/night
-                            <i class="tax-info">&nbsp; +17% GST</i>
-                        </p>
-                    </div>
-
+                <div class="heart-icon" data-id="<%= listing._id %>">
+                    <i class="<%= wishlist.includes(listing._id.toString()) ? 'fa-solid text-danger' : 'fa-regular' %> fa-heart"></i>
                 </div>
 
-            </a>
+                <a href="/listings/<%= listing._id %>" class="listing-link">
 
-        </div>
-
-    <% } %>
-
-</div>
+                <div class="card listing-card">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>">
+                  <div class="card-img-overlay"></div>
+                  <div class="card-body">
+                    <p class="card-text">
+                        <b><%= listing.title %></b><br>
+                        ₹ <%= listing.price.toLocaleString("en-IN") %>/night<i class="tax-info">&nbsp; +17% GST</i>
+                    </p>
+                  </div>
+                </div>
+                </a>
+            </div>
+        <% } %> 
+    </div>
 
 <script>
         let taxSwitch = document.getElementById("switchCheckDefault");
