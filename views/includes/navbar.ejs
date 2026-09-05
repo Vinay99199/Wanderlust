@@ -103,6 +103,19 @@
     .navbar{
         padding:.8rem 1rem;
     }
+    .navbar > .container-fluid{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+    }
+
+    .navbar-brand{
+        margin-right:auto;
+    }
+
+    .navbar-toggler{
+        margin-left:auto;
+    }
     .navbar-collapse{
         margin-top:15px;
         background:#fff;
@@ -186,6 +199,14 @@
 <nav class="navbar navbar-expand-md sticky-top">
     <div class="container-fluid">
 
+        <!-- Brand / Logo -->
+        <a class="navbar-brand d-flex align-items-center brand-logo" href="/listings">
+            <img
+                src="https://res.cloudinary.com/dqbzv0bgw/image/upload/v1785670216/ChatGPT_Image_Aug_2_2026_03_52_00_PM_mndiaj.png"
+                alt="Wanderlust Logo"
+                class="logo">
+        </a>
+
         <!-- Toggle Button -->
         <button
             class="navbar-toggler"
@@ -203,17 +224,6 @@
         <!-- Menu -->
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            <!-- Brand -->
-        <div class="me-auto">
-            <a class="navbar-brand d-flex align-items-center brand-logo" href="/listings">
-                <img
-                    src="https://res.cloudinary.com/dqbzv0bgw/image/upload/v1785670216/ChatGPT_Image_Aug_2_2026_03_52_00_PM_mndiaj.png"
-                    alt="Wanderlust Logo"
-                    class="logo">
-       <!-- <span class="brand-name">WanderLust</span> -->
-    </a>
-</div>
-
             <!-- Search -->
             <form
                 class="d-flex search-form mx-auto"
@@ -224,7 +234,8 @@
                     class="form-control search-inp me-md-2"
                     type="search"
                     name="q"
-                    placeholder="Search destinations..." required>
+                    placeholder="Search destinations..."
+                    required>
 
                 <button class="btn search-btn" type="submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -243,6 +254,7 @@
                 </li>
 
                 <% if(!currUser){ %>
+
                     <li class="nav-item">
                         <a href="/signup" class="nav-link">
                             <strong>Sign Up</strong>
@@ -254,9 +266,11 @@
                             <strong>Log In</strong>
                         </a>
                     </li>
+
                 <% } %>
 
                 <% if(currUser){ %>
+
                     <li class="nav-item">
                         <a href="/listings/favourites" class="nav-link">
                             <i class="fa-solid fa-heart text-danger"></i>
@@ -290,8 +304,11 @@
                             <strong>Log Out</strong>
                         </a>
                     </li>
+
                 <% } %>
+
             </ul>
+
         </div>
 
     </div>
