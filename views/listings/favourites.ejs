@@ -1,50 +1,213 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="container mt-4">
+<style>
+    .favourite-page {
+        padding: 20px 0 50px;
+    }
 
-    <h2 class="mb-4">❤️ My Favourite Listings</h2>
+    .favourite-title {
+        margin-bottom: 30px;
+        font-weight: 700;
+        color: #222;
+    }
 
-    <% if(allListings.length === 0){ %>
+    .listing-card {
+        height: 100%;
+        overflow: hidden;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-        <h4>No Favourite Listings Yet!</h4>
+    .listing-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+    }
+
+    .listing-image {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+    }
+
+    .listing-link {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .listing-link:hover {
+        color: inherit;
+    }
+
+    .card-body {
+        padding: 18px;
+    }
+
+    .listing-title {
+        margin-bottom: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #222;
+    }
+
+    .listing-price {
+        margin-bottom: 15px;
+        color: #555;
+    }
+
+    .remove-favourite {
+        width: 100%;
+        padding: 9px 15px;
+        background: #fff;
+        border: 1px solid #fe424d;
+        border-radius: 25px;
+        color: #fe424d;
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
+
+    .remove-favourite:hover {
+        background: #fe424d;
+        color: #fff;
+    }
+
+    .empty-favourites {
+        padding: 60px 20px;
+        text-align: center;
+        background: #fafafa;
+        border-radius: 15px;
+    }
+
+    .empty-favourites i {
+        margin-bottom: 15px;
+        font-size: 45px;
+        color: #fe424d;
+    }
+
+    .empty-favourites h4 {
+        margin-bottom: 8px;
+    }
+
+    .empty-favourites p {
+        margin-bottom: 20px;
+        color: #777;
+    }
+
+    .explore-btn {
+        padding: 10px 22px;
+        background: #fe424d;
+        border: none;
+        border-radius: 25px;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .explore-btn:hover {
+        background: #e03150;
+        color: #fff;
+    }
+
+    @media (max-width: 576px) {
+        .favourite-page {
+            padding: 15px 10px 40px;
+        }
+
+        .favourite-title {
+            font-size: 24px;
+        }
+
+        .listing-image {
+            height: 210px;
+        }
+    }
+</style>
+
+<div class="container favourite-page">
+
+    <h2 class="favourite-title">
+        <i class="fa-solid fa-heart text-danger"></i>
+        My Favourite Listings
+    </h2>
+
+    <% if (allListings.length === 0) { %>
+
+        <div class="empty-favourites">
+            <i class="fa-regular fa-heart"></i>
+
+            <h4>No Favourite Listings Yet</h4>
+
+            <p>
+                Save your favourite places here and find them easily later.
+            </p>
+
+            <a href="/listings" class="btn explore-btn">
+                Explore Listings
+            </a>
+        </div>
 
     <% } else { %>
 
-    <div class="row">
-        <% for(let listing of allListings){ %>
-        <div class="col-lg-4 col-md-6 mb-4">
+        <div class="row g-4">
 
-            <a href="/listings/<%= listing._id %>" class="listing-link">
+            <% for (let listing of allListings) { %>
 
-                <div class="card listing-card">
+                <div class="col-lg-4 col-md-6">
 
-                    <img
-                        src="<%= listing.image.url %>"
-                        class="card-img-top"
-                        alt="listing image"
-                    >
+                    <div class="card listing-card">
 
-                    <div class="card-body">
+                        <a
+                            href="/listings/<%= listing._id %>"
+                            class="listing-link">
 
-                        <p class="card-text">
+                            <img
+                                src="<%= listing.image.url %>"
+                                class="listing-image card-img-top"
+                                alt="<%= listing.title %>">
 
-                            <b><%= listing.title %></b><br>
+                        </a>
 
-                            ₹ <%= listing.price.toLocaleString("en-IN") %> / night
+                        <div class="card-body">
 
-                        </p>
+                            <a
+                                href="/listings/<%= listing._id %>"
+                                class="listing-link">
+
+                                <h5 class="listing-title">
+                                    <%= listing.title %>
+                                </h5>
+
+                                <p class="listing-price">
+                                    ₹ <%= listing.price.toLocaleString("en-IN") %>
+                                    / night
+                                </p>
+
+                            </a>
+
+                            <form
+                                action="/listings/<%= listing._id %>/wishlist"
+                                method="POST">
+
+                                <button
+                                    type="submit"
+                                    class="btn remove-favourite">
+
+                                    <i class="fa-solid fa-heart-crack me-1"></i>
+                                    Remove Favourite
+
+                                </button>
+
+                            </form>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </a>
+            <% } %>
 
         </div>
-
-        <% } %>
-
-    </div>
 
     <% } %>
 

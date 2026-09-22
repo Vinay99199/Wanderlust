@@ -49,11 +49,13 @@ router.post("/:id/wishlist", isLoggedIn, async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user.wishlist.includes(listingId)) {
         user.wishlist.pull(listingId);
+        req.flash("success", "Removed from favourites");
     } else {
         user.wishlist.push(listingId);
+        req.flash("success", "Added to favourites");
     }
     await user.save();
-    res.json({ success: true });
+    res.redirect(req.get("Referer") || "/listings");
 });
 
 module.exports = router;

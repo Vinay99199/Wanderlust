@@ -5,7 +5,6 @@
     <div class="support-card">
 
         <div class="support-header">
-
             <div class="support-icon">
                 <i class="fa-solid fa-envelope"></i>
             </div>
@@ -16,56 +15,50 @@
                 Have a question or need help?
                 We'd love to hear from you.
             </p>
-
         </div>
-
 
         <form action="/contact" method="POST" class="contact-form">
 
             <div class="form-group">
-
-                <label for="name">Name</label>
+                <label for="name">
+                    Name
+                </label>
 
                 <input
                     type="text"
                     id="name"
                     name="name"
-                    placeholder="Enter your name"
-                    required
-                >
-
+                    value="<%= user.username %>"
+                    readonly
+                    required>
             </div>
 
-
             <div class="form-group">
-
-                <label for="email">Email</label>
+                <label for="email">
+                    Email
+                </label>
 
                 <input
                     type="email"
                     id="email"
                     name="email"
-                    placeholder="Enter your email"
-                    required
-                >
-
+                    value="<%= user.email %>"
+                    readonly
+                    required>
             </div>
 
-
             <div class="form-group">
-
-                <label for="message">Message</label>
+                <label for="message">
+                    Message
+                </label>
 
                 <textarea
                     id="message"
                     name="message"
                     rows="6"
                     placeholder="Write your message..."
-                    required
-                ></textarea>
-
+                    required></textarea>
             </div>
-
 
             <button type="submit" class="support-btn">
                 <i class="fa-solid fa-paper-plane"></i>

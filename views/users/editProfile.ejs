@@ -1,56 +1,170 @@
+
 <% layout("/layouts/boilerplate") %>
 
-<div class="container col-md-6 mt-5">
+<style>
+    .edit-profile-page {
+        max-width: 650px;
+        margin: 50px auto;
+    }
 
-    <h2>Edit Profile</h2>
+    .edit-card {
+        padding: 35px;
+        background: #fff;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
 
-    <form action="/profile/edit" method="POST">
+    .edit-title {
+        margin-bottom: 8px;
+        font-size: 28px;
+        font-weight: 700;
+        color: #222;
+    }
 
-        <div class="mb-3">
-            <label>Email</label>
-            <input
-                type="email"
-                name="email"
-                class="form-control"
-                value="<%= user.email %>"
-            >
-        </div>
+    .edit-subtitle {
+        margin-bottom: 30px;
+        color: #777;
+    }
 
-        <div class="mb-3">
-            <label>Phone</label>
-            <input
-                type="text"
-                name="phone"
-                class="form-control"
-                value="<%= user.phone %>"
-            >
-        </div>
+    .form-label {
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 600;
+    }
 
-        <div class="mb-3">
-            <label>Bio</label>
+    .form-control {
+        padding: 11px 14px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: none;
+    }
 
-            <textarea
-                name="bio"
-                class="form-control"
-                rows="4"><%= user.bio %></textarea>
-        </div>
+    .form-control:focus {
+        border-color: #fe424d;
+        box-shadow: 0 0 0 0.15rem rgba(254, 66, 77, 0.12);
+    }
 
-        <div class="mb-3">
-            <label>Profile Image URL</label>
+    textarea.form-control {
+        resize: vertical;
+    }
 
-            <input
-                type="text"
-                name="profileImage"
-                class="form-control"
-                value="<%= user.profileImage?.url %>"
-            >
-        </div>
+    .save-btn {
+        padding: 11px 25px;
+        background: #fe424d;
+        border: none;
+        border-radius: 25px;
+        color: #fff;
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
 
-        <button class="btn btn-danger ">
-            Save Changes
-        </button>
+    .save-btn:hover {
+        background: #e03150;
+        color: #fff;
+    }
 
-    </form>
+    .cancel-btn {
+        padding: 11px 22px;
+        border-radius: 25px;
+        font-weight: 500;
+    }
 
+    @media (max-width: 576px) {
+        .edit-profile-page {
+            margin: 30px 15px;
+        }
+
+        .edit-card {
+            padding: 25px 20px;
+        }
+
+        .edit-title {
+            font-size: 24px;
+        }
+    }
+</style>
+
+<div class="container edit-profile-page">
+    <div class="edit-card">
+
+        <h2 class="edit-title">
+            Edit Your Profile
+        </h2>
+
+        <p class="edit-subtitle">
+            Keep your Wanderlust profile up to date.
+        </p>
+
+        <form action="/profile/edit" method="POST">
+
+            <div class="mb-4">
+                <label for="email" class="form-label">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                    value="<%= user.email %>"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="phone" class="form-label">
+                    Phone Number
+                </label>
+
+                <input
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    class="form-control"
+                    value="<%= user.phone || '' %>"
+                    placeholder="Enter your phone number">
+            </div>
+
+            <div class="mb-4">
+                <label for="bio" class="form-label">
+                    Bio
+                </label>
+
+                <textarea
+                    id="bio"
+                    name="bio"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Tell something about yourself..."><%= user.bio || '' %></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="profileImage" class="form-label">
+                    Profile Image URL
+                </label>
+
+                <input
+                    type="text"
+                    id="profileImage"
+                    name="profileImage"
+                    class="form-control"
+                    value="<%= user.profileImage?.url || '' %>"
+                    placeholder="Paste your profile image URL">
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn save-btn">
+                    <i class="fa-solid fa-check me-2"></i>
+                    Save Changes
+                </button>
+
+                <a href="/profile" class="btn btn-outline-secondary cancel-btn">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+    </div>
 </div>
 

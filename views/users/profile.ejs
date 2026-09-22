@@ -1,48 +1,196 @@
+
 <% layout("/layouts/boilerplate") %>
 
-<div class="container mt-5">
-    <div class="card shadow p-4">
+<style>
+    .profile-page {
+        max-width: 850px;
+        margin: 50px auto;
+    }
 
-        <div class="text-center">
+    .profile-card {
+        overflow: hidden;
+        background: #fff;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
 
+    .profile-header {
+        height: 150px;
+        background: linear-gradient(135deg, #fe424d, #ff6b6b);
+    }
+
+    .profile-content {
+        position: relative;
+        padding: 0 40px 35px;
+    }
+
+    .profile-image {
+        width: 130px;
+        height: 130px;
+        margin-top: -65px;
+        object-fit: cover;
+        background: #fff;
+        border: 5px solid #fff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+    }
+
+    .profile-name {
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-size: 28px;
+        font-weight: 700;
+        color: #222;
+    }
+
+    .profile-email {
+        margin-bottom: 25px;
+        color: #777;
+    }
+
+    .profile-info {
+        margin-top: 25px;
+    }
+
+    .info-item {
+        padding: 18px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        display: block;
+        margin-bottom: 5px;
+        color: #777;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        margin: 0;
+        color: #222;
+        font-size: 16px;
+    }
+
+    .profile-actions {
+        margin-top: 25px;
+    }
+
+    .edit-btn {
+        padding: 10px 24px;
+        background: #222;
+        border: none;
+        border-radius: 25px;
+        color: #fff;
+        transition: 0.3s ease;
+    }
+
+    .edit-btn:hover {
+        background: #fe424d;
+        color: #fff;
+    }
+
+    .wishlist-count {
+        display: inline-block;
+        padding: 5px 12px;
+        background: #fff1f2;
+        border-radius: 20px;
+        color: #fe424d;
+        font-weight: 600;
+    }
+
+    @media (max-width: 576px) {
+        .profile-page {
+            margin: 30px 15px;
+        }
+
+        .profile-header {
+            height: 120px;
+        }
+
+        .profile-content {
+            padding: 0 20px 25px;
+        }
+
+        .profile-image {
+            width: 110px;
+            height: 110px;
+            margin-top: -55px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+        }
+    }
+</style>
+
+<div class="container profile-page">
+    <div class="profile-card">
+
+        <div class="profile-header"></div>
+
+        <div class="profile-content text-center">
             <img
                 src="<%= user.profileImage?.url || 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>"
-                class="rounded-circle mb-3"
-                width="120"
-                height="120"
-            >
+                alt="Profile"
+                class="profile-image rounded-circle">
 
-            <h2><%= user.username %></h2>
+            <h2 class="profile-name">
+                <%= user.username %>
+            </h2>
 
-            <p><%= user.email %></p>
+            <p class="profile-email">
+                <i class="fa-regular fa-envelope me-1"></i>
+                <%= user.email %>
+            </p>
 
+            <div class="profile-info text-start">
+                <div class="info-item">
+                    <span class="info-label">Phone</span>
+                    <p class="info-value">
+                        <%= user.phone || "Not Added" %>
+                    </p>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">Bio</span>
+                    <p class="info-value">
+                        <%= user.bio || "No Bio Yet" %>
+                    </p>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">Joined On</span>
+                    <p class="info-value">
+                        <%= user.createdAt
+                            ? user.createdAt.toDateString()
+                            : "N/A" %>
+                    </p>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">Wishlist</span>
+                    <p class="info-value">
+                        <span class="wishlist-count">
+                            <i class="fa-solid fa-heart me-1"></i>
+                            <%= user.wishlist.length %> Listings
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <a href="/profile/edit" class="btn edit-btn">
+                    <i class="fa-solid fa-pen me-2"></i>
+                    Edit Profile
+                </a>
+            </div>
         </div>
-
-        <hr>
-
-        <h5>Phone</h5>
-
-        <p><%= user.phone || "Not Added" %></p>
-
-        <h5>Bio</h5>
-
-        <p><%= user.bio || "No Bio Yet" %></p>
-
-        <h5>Joined On</h5>
-
-        <p>
-            <%= user.createdAt
-                ? user.createdAt.toDateString()
-                : "N/A" %>
-        </p>
-
-        <h5>Wishlist</h5>
-
-        <p><%= user.wishlist.length %> Listings</p>
-
     </div>
-    <a href="/profile/edit" class="btn btn-dark mt-3 mb-3">
-    Edit Profile
-    </a>
 </div>
 
