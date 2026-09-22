@@ -186,7 +186,8 @@
 
                             <form
                                 action="/listings/<%= listing._id %>/wishlist"
-                                method="POST">
+                                method="POST"
+                                class="remove-favourite-form">
 
                                 <button
                                     type="submit"
@@ -212,3 +213,33 @@
     <% } %>
 
 </div>
+
+<script>
+    document.querySelectorAll('.remove-favourite-form').forEach(form => {
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Remove favourite failed');
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = '/listings/favourites';
+                }
+            } catch (error) {
+                console.error('Remove favourite error:', error);
+                window.location.reload();
+            }
+        });
+    });
+</script>

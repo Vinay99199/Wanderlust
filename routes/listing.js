@@ -1,61 +1,113 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+
 const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
 const User = require("../models/user");
-const { isLoggedIn, isOwner,validateListing } = require("../middleware.js");
+const {
+    isLoggedIn,
+    isOwner,
+    validateListing
+} = require("../middleware.js");
+
 const listingController = require("../controllers/listings.js");
+
 const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
+
 const upload = multer({ storage });
 
 
 // Index & Create
+
 router.route("/")
-  .get(wrapAsync(listingController.index))
-  .post(isLoggedIn,
-   upload.single("listing[image]"),
-   validateListing,
-  wrapAsync(listingController.createListing));
+    .get(wrapAsync(listingController.index))
+    .post(
+        isLoggedIn,
+        upload.single("listing[image]"),
+        validateListing,
+        wrapAsync(listingController.createListing)
+    );
 
-//New route
-router.get("/new",
-  isLoggedIn,listingController.renderNewForm );
 
-//favourites
+// New route
+
+router.get(
+    "/new",
+    isLoggedIn,
+    listingController.renderNewForm
+);
+
+
+// Favourites
+
 router.get(
     "/favourites",
     isLoggedIn,
     wrapAsync(listingController.renderFavourites)
 );
 
-//Show, Update & Delete
-router.route("/:id")
-  .get(wrapAsync(listingController.showListing))
-  .put(isLoggedIn,isOwner,
-   upload.single("listing[image]"),
-   validateListing,wrapAsync(listingController.updateListing))
-  .delete(isLoggedIn,isOwner,wrapAsync(listingController.destroyListing));
 
+// Wishlist
 
-//Edit route
-router.get("/:id/edit",
-  isLoggedIn,isOwner,
-  wrapAsync(listingController.renderEditForm) );
+router.post(
+    "/:id/wishlist",
+    isLoggedIn,
+    async (req, res) => {
+        const listingId = req.params.id;
+        const user = await User.findById(req.user._id);
 
+        if (user.wishlist.includes(listingId)) {
+            user.wishlist.pull(listingId);
+        } else {
+            user.wishlist.push(listingId);
+        }
 
-router.post("/:id/wishlist", isLoggedIn, async (req, res) => {
-    const listingId = req.params.id;
-    const user = await User.findById(req.user._id);
-    if (user.wishlist.includes(listingId)) {
-        user.wishlist.pull(listingId);
-        req.flash("success", "Removed from favourites");
-    } else {
-        user.wishlist.push(listingId);
-        req.flash("success", "Added to favourites");
+        await user.save();
+
+        const isFavourite = user.wishlist.includes(listingId);
+        const wantsJson = req.xhr
+            || req.headers.accept?.includes("application/json")
+            || req.headers["content-type"] === "application/json";
+
+        if (wantsJson) {
+            return res.json({
+                success: true,
+                isFavourite,
+            });
+        }
+
+        return res.redirect("/listings/favourites");
     }
-    await user.save();
-    res.redirect(req.get("Referer") || "/listings");
-});
+);
+
+
+// Show, Update & Delete
+
+router.route("/:id")
+    .get(wrapAsync(listingController.showListing))
+    .put(
+        isLoggedIn,
+        isOwner,
+        upload.single("listing[image]"),
+        validateListing,
+        wrapAsync(listingController.updateListing)
+    )
+    .delete(
+        isLoggedIn,
+        isOwner,
+        wrapAsync(listingController.destroyListing)
+    );
+
+
+// Edit route
+
+router.get(
+    "/:id/edit",
+    isLoggedIn,
+    isOwner,
+    wrapAsync(listingController.renderEditForm)
+);
+
 
 module.exports = router;
