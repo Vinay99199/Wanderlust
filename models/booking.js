@@ -63,8 +63,10 @@ const bookingSchema = new Schema(
       enum: ["Pending", "Paid", "Refunded"],
       default: "Pending",
     },
+
+    // Razorpay payment details
     razorpayOrderId: {
-    type: String,
+      type: String,
     },
 
     razorpayPaymentId: {
@@ -75,7 +77,24 @@ const bookingSchema = new Schema(
       type: String,
     },
 
-    cancelledAt: Date,
+    // Razorpay refund details
+    refundId: {
+      type: String,
+    },
+
+    refundStatus: {
+      type: String,
+      enum: ["Not Requested", "Processing", "Processed", "Failed"],
+      default: "Not Requested",
+    },
+
+    refundedAt: {
+      type: Date,
+    },
+
+    cancelledAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,

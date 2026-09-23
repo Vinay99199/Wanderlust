@@ -105,27 +105,24 @@
 
                     <!-- Payment -->
                     <td>
-                        <% if(booking.paymentStatus==="Paid"){ %>
-
+                        <% if(booking.paymentStatus==="Paid" ){ %>
+                    
                             <span class="badge bg-success">
                                 Paid
                             </span>
-
-                        <% } else if(booking.paymentStatus==="Refunded"){ %>
-                            <span class="badge bg-danger">
-                                Refunded
-                            </span>
-
-                        <% } else { %>
-
-                            <span class="badge bg-warning text-dark">
-                                Pending
-                            </span>
-
+                    
+                            <% } else if(booking.paymentStatus==="Refunded" ){ %>
+                            
+                                <span class="badge bg-info text-dark">
+                                    Refunded
+                                </span>
+                            
+                            <% } else { %>
+                            <span class="badge bg-warning text-dark"> Pending </span>
                         <% } %>
-
                     </td>
 
+                    
                     <!-- Booking Status -->
                     <td>
 
