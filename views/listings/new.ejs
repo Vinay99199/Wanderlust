@@ -1,180 +1,182 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row">
-    <div class="col-8 offset-2">
-        <br><br>
+<div class="row mt-4 mb-5">
+    <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+        <div class="card shadow-sm border-0 p-4 rounded-3">
+            <h3 class="card-title fw-bold mb-4 text-center">Create a New Listing</h3>
 
-        <h3>Create a new Listing</h3>
+            <form
+                method="POST"
+                action="/listings"
+                novalidate
+                class="needs-validation"
+                enctype="multipart/form-data"
+            >
 
-        <form
-            method="POST"
-            action="/listings"
-            novalidate
-            class="needs-validation"
-            enctype="multipart/form-data"
-        >
-
-            <!-- Title -->
-            <div class="mb-3">
-                <label for="title" class="form-label mb-0">Title</label>
-
-                <input
-                    id="title"
-                    name="listing[title]"
-                    placeholder="Add a catchy title"
-                    class="form-control"
-                    required
-                >
-
-                <div class="invalid-feedback">
-                    Please enter a title.
-                </div>
-            </div>
-
-
-            <!-- Description -->
-            <div class="mb-3">
-                <label for="description" class="form-label mb-0">
-                    Description
-                </label>
-
-                <textarea
-                    id="description"
-                    name="listing[description]"
-                    placeholder="enter description"
-                    class="form-control"
-                    required
-                ></textarea>
-
-                <div class="invalid-feedback">
-                    Please enter a description.
-                </div>
-            </div>
-
-
-            <!-- Image -->
-            <div class="mb-3">
-                <label for="image" class="form-label mb-0">
-                    Upload Listing Image
-                </label>
-
-                <input
-                    id="image"
-                    name="listing[image]"
-                    type="file"
-                    class="form-control"
-                    required
-                >
-
-                <div class="invalid-feedback">
-                    Please upload a listing image.
-                </div>
-            </div>
-
-
-            <!-- Price + Country -->
-            <div class="row">
-
-                <div class="mb-3 col-md-4">
-                    <label for="price" class="form-label mb-0">
-                        Price
-                    </label>
-
+                <!-- Title -->
+                <div class="mb-3">
+                    <label for="title" class="form-label fw-semibold">Title</label>
                     <input
-                        id="price"
-                        name="listing[price]"
-                        placeholder="1200"
-                        type="number"
-                        class="form-control"
-                        required
-                    >
-
-                    <div class="invalid-feedback">
-                        Price should be valid.
-                    </div>
-                </div>
-
-
-                <div class="mb-3 col-md-8">
-                    <label for="country" class="form-label mb-0">
-                        Country
-                    </label>
-
-                    <input
-                        id="country"
-                        name="listing[country]"
-                        placeholder="India"
+                        id="title"
+                        name="listing[title]"
+                        placeholder="e.g. Cozy Beachfront Villa"
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-lg"
                         required
                     >
-
                     <div class="invalid-feedback">
-                        Country name should be valid.
+                        Please enter a catchy title.
                     </div>
                 </div>
 
-            </div>
-
-
-            <!-- Category -->
-            <div class="mb-3">
-                <label for="category" class="form-label">
-                    Category
-                </label>
-
-                <select
-                    id="category"
-                    name="listing[category]"
-                    class="form-select"
-                    required
-                >
-                    <option value="Trending">Trending</option>
-                    <option value="Rooms">Rooms</option>
-                    <option value="Iconic Cities">Iconic Cities</option>
-                    <option value="Mountains">Mountains</option>
-                    <option value="Castles">Castles</option>
-                    <option value="Amazing Pools">Amazing Pools</option>
-                    <option value="Camping">Camping</option>
-                    <option value="Farms">Farms</option>
-                    <option value="Arctic">Arctic</option>
-                    <option value="Domes">Domes</option>
-                    <option value="Boats">Boats</option>
-                </select>
-
-                <div class="invalid-feedback">
-                    Please select a category.
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="description" class="form-label fw-semibold">Description</label>
+                    <textarea
+                        id="description"
+                        name="listing[description]"
+                        placeholder="Describe the place, amenities, and unique features..."
+                        class="form-control"
+                        rows="4"
+                        required
+                    ></textarea>
+                    <div class="invalid-feedback">
+                        Please enter a detailed description.
+                    </div>
                 </div>
-            </div>
 
+                <!-- Image Upload & Preview -->
+                <div class="mb-3">
+                    <label for="image" class="form-label fw-semibold">Upload Listing Image</label>
+                    <input
+                        id="image"
+                        name="listing[image]"
+                        type="file"
+                        class="form-control"
+                        accept="image/*"
+                        onchange="previewImage(event)"
+                        required
+                    >
+                    <div class="invalid-feedback">
+                        Please upload a listing image.
+                    </div>
 
-            <!-- Location -->
-            <div class="mb-3">
-                <label for="location" class="form-label mb-0">
-                    Location
-                </label>
-
-                <input
-                    id="location"
-                    name="listing[location]"
-                    placeholder="Kanpur, Uttar Pradesh"
-                    type="text"
-                    class="form-control"
-                    required
-                >
-
-                <div class="invalid-feedback">
-                    Location should be valid.
+                    <!-- Live Image Preview Container -->
+                    <div id="imagePreviewContainer" class="mt-3 d-none text-center">
+                        <img id="imagePreview" src="#" alt="Listing Preview" class="img-fluid rounded-3 border shadow-sm" style="max-height: 220px; object-fit: cover; width: 100%;">
+                    </div>
                 </div>
-            </div>
 
+                <!-- Price & Category (Grid Row) -->
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="price" class="form-label fw-semibold">Price per Night</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₹</span>
+                            <input
+                                id="price"
+                                name="listing[price]"
+                                placeholder="1200"
+                                type="number"
+                                min="0"
+                                step="1"
+                                class="form-control"
+                                required
+                            >
+                            <div class="invalid-feedback">
+                                Please enter a valid price.
+                            </div>
+                        </div>
+                    </div>
 
-            <button class="btn btn-dark add-btn">
-                Add
-            </button>
+                    <div class="mb-3 col-md-6">
+                        <label for="category" class="form-label fw-semibold">Category</label>
+                        <select
+                            id="category"
+                            name="listing[category]"
+                            class="form-select"
+                            required
+                        >
+                            <option value="" disabled selected>Select category...</option>
+                            <option value="Trending">Trending</option>
+                            <option value="Rooms">Rooms</option>
+                            <option value="Iconic Cities">Iconic Cities</option>
+                            <option value="Mountains">Mountains</option>
+                            <option value="Castles">Castles</option>
+                            <option value="Amazing Pools">Amazing Pools</option>
+                            <option value="Camping">Camping</option>
+                            <option value="Farms">Farms</option>
+                            <option value="Arctic">Arctic</option>
+                            <option value="Domes">Domes</option>
+                            <option value="Boats">Boats</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a category.
+                        </div>
+                    </div>
+                </div>
 
-            <br><br>
+                <!-- Location & Country (Grid Row) -->
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="location" class="form-label fw-semibold">City / Location</label>
+                        <input
+                            id="location"
+                            name="listing[location]"
+                            placeholder="e.g. Kanpur, Uttar Pradesh"
+                            type="text"
+                            class="form-control"
+                            required
+                        >
+                        <div class="invalid-feedback">
+                            Please enter location details.
+                        </div>
+                    </div>
 
-        </form>
+                    <div class="mb-3 col-md-6">
+                        <label for="country" class="form-label fw-semibold">Country</label>
+                        <input
+                            id="country"
+                            name="listing[country]"
+                            placeholder="e.g. India"
+                            type="text"
+                            class="form-control"
+                            required
+                        >
+                        <div class="invalid-feedback">
+                            Please enter country name.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid gap-2 mt-4">
+                    <button class="btn btn-dark btn-lg add-btn">
+                        Create Listing
+                    </button>
+                </div>
+
+            </form>
+        </div>
     </div>
 </div>
+
+<!-- Image Preview Script -->
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const previewImage = document.getElementById('imagePreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewContainer.classList.remove('d-none');
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            previewContainer.classList.add('d-none');
+        }
+    }
+</script>

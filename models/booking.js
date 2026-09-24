@@ -46,10 +46,42 @@ const bookingSchema = new Schema(
       type: Number,
       required: true,
     },
+    originalPrice: {
+      type: Number,
+      required: true,
+    },
 
+    discountPercent: {
+      type: Number,
+      default: 0,
+    },
+
+    discountAmount: {
+      type: Number,
+      default: 0,
+    },
     totalPrice: {
       type: Number,
       required: true,
+    },
+    originalPrice: {
+      type: Number,
+      required: true,
+    },
+
+    discountPercent: {
+      type: Number,
+      default: 0,
+    },
+
+    discountAmount: {
+      type: Number,
+      default: 0,
+    },
+
+    couponCode: {
+      type: String,
+      default: null,
     },
 
     bookingStatus: {

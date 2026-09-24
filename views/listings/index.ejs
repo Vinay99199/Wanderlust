@@ -1,308 +1,398 @@
-<% layout("/layouts/boilerplate")%>
+<% layout("/layouts/boilerplate") %>
 <style>
+
+.filters-wrapper {
+    position: relative;
+    z-index: 100;
+    width: 100%;
+    margin-top: 80px;
+    padding: 18px 0 5px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+#filters {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    padding: 0 8px 10px;
+    scrollbar-width: none;
+}
+
+#filters::-webkit-scrollbar {
+    display: none;
+}
+
+.filter {
+    min-width: 82px;
+    height: 72px;
+    padding: 8px 10px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #5f6368;
+    background: #fff;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.filter i {
+    font-size: 21px;
+    margin-bottom: 6px;
+}
+
+.filter p {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.filter:hover {
+    color: #222;
+    background: #f7f7f7;
+}
+
+.filter.active {
+    color: #fe424d;
+    background: #fff4f5;
+    border-color: #ffd9dc;
+}
+
+.filter.active p {
+    font-weight: 600;
+}
+
+.filter.active i {
+    color: #fe424d;
+}
+
+.listings-row {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.listings-row .col {
+    min-width: 0;
+}
+
+.listing-card {
+    width: 100%;
+    border: none !important;
+    background: transparent;
+}
+
+.listing-card img {
+    width: 100%;
+    height: 18rem;
+    object-fit: cover;
+    border-radius: 14px;
+    transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.listing-card:hover img {
+    filter: brightness(1.08);
+    opacity: 0.88;
+}
+
+.listing-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.index-listing-info {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0 6px;
+}
+
+.index-title {
+    flex: 1 1 auto;
+    min-width: 120px;
+    margin: 8px 0 0;
+    color: #222;
+    line-height: 1.35;
+}
+
+.index-title b {
+    font-size: 15px;
+}
+
+.index-off-price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex: 0 0 auto;
+    margin-top: 8px;
+    white-space: nowrap;
+}
+
+.discount-badge {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 2px 5px;
+    border-radius: 5px;
+    background: #eaf8ee;
+    color: #198754;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.index-listing-price {
+    margin: 0;
+    color: #222;
+    white-space: nowrap;
+}
+
+.index-listing-price strong {
+    font-size: 15px;
+}
+
+.index-listing-price span {
+    color: #777;
+    font-size: 13px;
+}
+
+
+.heart-icon {
+    position: absolute;
+    top: 13px;
+    right: 13px;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .95);
+    color: #222;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .14);
+    transition: .2s ease;
+}
+
+.heart-icon:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .18);
+}
+
+.heart-icon:focus {
+    outline: none;
+}
+
+.heart-icon i {
+    pointer-events: none;
+}
+
+@media (min-width: 1200px) {
+
     #filters {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 1.5rem;
-        width: 100%;
+        justify-content: center;
+        gap: 14px;
     }
 
     .filter {
-        text-align: center;
-        margin-top: 2rem;
-        opacity: 0.8;
-        flex-shrink: 0;
-    }
-
-    .filter:hover {
-        opacity: 1;
-        cursor: pointer;
-    }
-
-    .filter p {
-        font-size: 0.8rem;
-        margin-bottom: 0;
-    }
-
-    .tax-info {
-        display: none;
-    }
-
-    .tax-toggle {
-        border: 1px solid #000;
-        text-align: center;
-        border-radius: 1rem;
-        height: 3.5rem;
-        padding: 1rem;
-        margin-left: 3rem;
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-    }
-
-    #switchCheckDefault {
-        cursor: pointer;
-    }
-
-    .listings-row {
-        width: 100%;
-    }
-
-    .listing-card {
-        width: 100%;
-        border: none !important;
+        min-width: 90px;
     }
 
     .listing-card img {
-        width: 100%;
+        height: 20rem;
+    }
+
+}
+
+@media (max-width: 991px) {
+    .filters-wrapper {
+        margin-top: 72px;
+    }
+    .filters-wrapper {
+        margin-top: 68px;
+    }
+    #filters {
+        justify-content: flex-start;
+    }
+
+    .filter {
+        min-width: 78px;
+        height: 68px;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .filters-wrapper {
+        padding-top: 12px;
+    }
+
+    #filters {
+        gap: 7px;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    .filter {
+        min-width: 72px;
+        height: 64px;
+        padding: 7px 8px;
+    }
+
+    .filter i {
+        font-size: 19px;
+        margin-bottom: 5px;
+    }
+
+    .filter p {
+        font-size: 11px;
+    }
+
+    .listing-card img {
         height: 16rem;
-        object-fit: cover;
-    }
-
-    .listings-row .col {
-        min-width: 0;
-    }
-
-    .card-text {
-        overflow-wrap: normal;
-        word-break: normal;
+        border-radius: 12px;
     }
 
     .heart-icon {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        z-index: 10;
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.95);
-        color: #222;
-        cursor: pointer;
-        padding: 0;
-        font-size: 1.15rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        top: 10px;
+        right: 10px;
+        width: 38px;
+        height: 38px;
     }
 
-    .heart-icon:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    .index-title {
+        flex-basis: 150px;
     }
 
-    .heart-icon:active {
-        transform: translateY(0);
+    .index-title b {
+        font-size: 14px;
     }
 
-    .heart-icon:focus {
-        outline: none;
+    .discount-badge {
+        font-size: 10px;
+        padding: 3px 6px;
     }
 
-    .heart-icon i {
-        pointer-events: none;
+    .index-listing-price strong {
+        font-size: 14px;
     }
 
-    @media (max-width: 768px) {
-        #filters {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            overflow-y: hidden;
-            gap: 1.3rem;
-            padding: 0 1rem 10px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        #filters::-webkit-scrollbar {
-            display: none;
-        }
-
-        .filter {
-            flex: 0 0 auto;
-            margin-top: 1.3rem;
-            min-width: 55px;
-        }
-
-        .filter p {
-            white-space: nowrap;
-            font-size: 0.75rem;
-        }
-
-        .tax-toggle {
-            flex: 0 0 auto;
-            margin-left: 1rem;
-            margin-top: 1.3rem;
-            white-space: nowrap;
-        }
-
-        .listings-row {
-            width: 100%;
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-        .listings-row .col {
-            width: 100%;
-            max-width: 100%;
-        }
-
-        .listing-card {
-            width: 100%;
-        }
-
-        .listing-card img {
-            width: 100%;
-            height: 16rem;
-            object-fit: cover;
-        }
+    .index-listing-price span {
+        font-size: 12px;
     }
 
-    @media (max-width: 480px) {
-        #filters {
-            gap: 1.1rem;
-            padding-left: 0.7rem;
-            padding-right: 0.7rem;
-        }
+}
 
-        .filter {
-            min-width: 50px;
-        }
+@media (max-width: 360px) {
 
-        .filter p {
-            font-size: 0.7rem;
-        }
-
-        .tax-toggle {
-            margin-left: 0.5rem;
-            padding: 0.8rem;
-            font-size: 0.85rem;
-        }
-
-        .heart-icon {
-            top: 12px;
-            right: 12px;
-            width: 40px;
-            height: 40px;
-        }
-    }
- 
-    @media (max-width: 360px) {
-        #filters {
-            gap: 0.9rem;
-        }
-
-        .filter {
-            min-width: 45px;
-        }
-
-        .filter p {
-            font-size: 0.65rem;
-        }
-
-        .tax-toggle {
-            font-size: 0.75rem;
-        }
-
-        .heart-icon {
-            top: 10px;
-            right: 10px;
-            width: 38px;
-            height: 38px;
-            font-size: 1rem;
-        }
+    .filter {
+        min-width: 68px;
     }
 
-    @media (min-width: 768px) and (max-width: 991px) {
-        .listing-card img {
-            height: 16rem;
-        }
+    .filter p {
+        font-size: 10px;
     }
 
-    @media (min-width: 992px) {
-        .listing-card img {
-            height: 18rem;
-        }
+    .listing-card img {
+        height: 14rem;
     }
 
-    @media (min-width: 1200px) {
-        .listing-card img {
-            height: 20rem;
-        }
+    .index-title {
+        flex-basis: 130px;
+        min-width: 100px;
     }
+
+    .discount-badge {
+        font-size: 9px;
+        padding: 2px 5px;
+    }
+}
+
 </style>
 
+
+<div class="filters-wrapper">
+
     <div id="filters">
+
         <div class="filter" data-filter="">
-            <div><i class="fa-solid fa-house"></i></div>
+            <i class="fa-solid fa-house"></i>
             <p>All</p>
         </div>
+
         <div class="filter" data-filter="Trending">
-            <div><i class="fa-solid fa-fire"></i></div>
+            <i class="fa-solid fa-fire"></i>
             <p>Trending</p>
         </div>
-    
+
         <div class="filter" data-filter="Rooms">
-            <div><i class="fa-solid fa-bed"></i></div>
+            <i class="fa-solid fa-bed"></i>
             <p>Rooms</p>
         </div>
-    
+
         <div class="filter" data-filter="Iconic Cities">
-            <div><i class="fa-solid fa-city"></i></div>
+            <i class="fa-solid fa-city"></i>
             <p>Iconic Cities</p>
         </div>
-    
+
         <div class="filter" data-filter="Mountains">
-            <div><i class="fa-solid fa-mountain"></i></div>
+            <i class="fa-solid fa-mountain"></i>
             <p>Mountains</p>
         </div>
-    
+
         <div class="filter" data-filter="Castles">
-            <div><i class="fa-solid fa-chess-rook"></i></div>
+            <i class="fa-solid fa-chess-rook"></i>
             <p>Castles</p>
         </div>
-    
+
         <div class="filter" data-filter="Amazing Pools">
-            <div><i class="fa-solid fa-water-ladder"></i></div>
+            <i class="fa-solid fa-water-ladder"></i>
             <p>Amazing Pools</p>
         </div>
-    
+
         <div class="filter" data-filter="Camping">
-            <div><i class="fa-solid fa-campground"></i></div>
+            <i class="fa-solid fa-campground"></i>
             <p>Camping</p>
         </div>
-    
+
         <div class="filter" data-filter="Farms">
-            <div><i class="fa-solid fa-tractor"></i></div>
+            <i class="fa-solid fa-tractor"></i>
             <p>Farms</p>
         </div>
-    
+
         <div class="filter" data-filter="Arctic">
-            <div><i class="fa-solid fa-snowflake"></i></div>
+            <i class="fa-solid fa-snowflake"></i>
             <p>Arctic</p>
         </div>
-    
+
         <div class="filter" data-filter="Domes">
-            <div><i class="fa-solid fa-igloo"></i></div>
+            <i class="fa-solid fa-igloo"></i>
             <p>Domes</p>
         </div>
-    
+
         <div class="filter" data-filter="Boats">
-            <div><i class="fa-solid fa-ship"></i></div>
+            <i class="fa-solid fa-ship"></i>
             <p>Boats</p>
         </div>
-        <div class="tax-toggle">
-            <div class="form-check-reverse form-switch"> <input class="form-check-input" type="checkbox" role="switch"
-                    id="switchCheckDefault"> <label class="form-check-label" for="switchCheckDefault">Display total after
-                    taxes</label> </div>
-        </div>
-        </div>
 
-<div class="row listings-row g-3 mt-3">
+    </div>
+
+</div>
+
+
+<div class="row listings-row g-3 mt-2">
 
     <% for(let listing of allListings) { %>
 
@@ -329,25 +419,25 @@
                         class="card-img-top"
                         alt="<%= listing.title %>">
 
-                    <div class="card-img-overlay"></div>
-
-                    <div class="card-body">
-
-                        <p class="card-text">
-
-                            <b>
-                                <%= listing.title %>
-                            </b>
-                            <br>
-
-                            ₹ <%= listing.price.toLocaleString("en-IN") %>/night
-
-                            <i class="tax-info">
-                                &nbsp; +17% GST
-                            </i>
-
-                        </p>
-
+                    <div class="card-body px-1">
+                        <div class="index-listing-info">
+                        
+                            <div class="index-title">
+                                <b>
+                                    <%= listing.title %>
+                                </b>
+                            </div>
+                        
+                            <div class="index-off-price">
+                                <span class="discount-badge">10% OFF</span>
+                        
+                                <p class="index-listing-price">
+                                    <strong>₹<%= listing.price.toLocaleString("en-IN") %></strong>
+                                    <span>/ night</span>
+                                </p>
+                            </div>
+                        
+                        </div>
                     </div>
 
                 </div>
@@ -360,29 +450,46 @@
 
 </div>
 
+
 <script>
-    const taxSwitch = document.getElementById("switchCheckDefault");
 
-    if (taxSwitch) {
-        taxSwitch.addEventListener("click", () => {
-            const taxInfoElements = document.querySelectorAll(".tax-info");
+document.addEventListener("DOMContentLoaded", () => {
 
-            taxInfoElements.forEach(elem => {
-                elem.style.display =
-                    elem.style.display === "inline"
-                        ? "none"
-                        : "inline";
-            });
+    const currentCategory =
+        new URLSearchParams(window.location.search).get("category") || "";
+
+    document.querySelectorAll(".filter").forEach(filter => {
+
+        if (filter.dataset.filter === currentCategory) {
+            filter.classList.add("active");
+        }
+
+        filter.addEventListener("click", () => {
+
+            const category = filter.dataset.filter;
+
+            if (category === "") {
+                window.location.href = "/listings";
+                return;
+            }
+
+            window.location.href =
+                `/listings?category=${encodeURIComponent(category)}`;
+
         });
-    }
+
+    });
 
 
     document.querySelectorAll(".heart-icon").forEach(icon => {
-        icon.addEventListener("click", async function (e) {
+
+        icon.addEventListener("click", async function(e) {
+
             e.preventDefault();
             e.stopPropagation();
 
-            const isLoggedIn = <%= currUser ? "true" : "false" %>;
+            const isLoggedIn =
+                <%= currUser ? "true" : "false" %>;
 
             if (!isLoggedIn) {
                 window.location.href = "/login";
@@ -392,11 +499,10 @@
             const listingId = this.dataset.id;
             const heart = this.querySelector("i");
 
-            if (!heart) {
-                return;
-            }
+            if (!heart) return;
 
-            const wasFavourite = heart.classList.contains("fa-solid");
+            const wasFavourite =
+                heart.classList.contains("fa-solid");
 
             heart.classList.toggle(
                 "fa-regular",
@@ -414,10 +520,14 @@
             );
 
             try {
+
                 const response = await fetch(
                     `/listings/${listingId}/wishlist`,
                     {
-                        method: "POST"
+                        method: "POST",
+                        headers: {
+                            "Accept": "application/json"
+                        }
                     }
                 );
 
@@ -446,7 +556,8 @@
                     data.isFavourite
                 );
 
-            } catch (error) {
+            } catch(error) {
+
                 heart.classList.toggle(
                     "fa-regular",
                     !wasFavourite
@@ -463,22 +574,13 @@
                 );
 
                 console.error("Favourite error:", error);
-            }
-        });
-    });
 
-
-    document.querySelectorAll(".filter").forEach(filter => {
-        filter.addEventListener("click", () => {
-            const category = filter.dataset.filter;
-
-            if (category === "") {
-                window.location.href = "/listings";
-                return;
             }
 
-            window.location.href =
-                `/listings?category=${encodeURIComponent(category)}`;
         });
+
     });
+
+});
+
 </script>

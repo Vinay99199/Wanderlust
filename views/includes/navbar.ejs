@@ -1,213 +1,389 @@
 <style>
-.navbar{
-    min-height:5rem;
-    background:#fff !important;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-    padding:.6rem 1rem;
-    z-index:1050;
-}
-.nav-link{
-    color:#222 !important;
-    margin-right:.5rem;
-    padding:.55rem .9rem;
-    border-radius:25px;
-    transition:.3s ease;
-    font-weight:500;
-}
-.nav-link:hover{
-    background:#f3f3f3;
+
+.navbar {
+    min-height: 5rem;
+    width: 100%;
+    background: #fff !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+    padding: .55rem 1.2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
 }
 
-.navbar-brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    text-decoration:none;
+.navbar > .container-fluid {
+    gap: 18px;
 }
 
-.logo{
-    width:180px;
-    height:55px;
-    object-fit:contain;
-    display:block;
-    flex-shrink:0;
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
 }
 
-.search-form{
-    width:100%;
-    max-width:430px;
-}
-.search-inp{
-    border-radius:25px;
-    width:260px;
-    padding:.55rem 1rem;
-}
-.search-btn{
-    border-radius:25px;
-    background:#fe424d;
-    color:#fff;
-    border:none;
-    padding:.55rem 1rem;
-    transition:.3s;
-    white-space:nowrap;
-}
-.search-btn:hover{
-    background:#e03150;
-    color:#fff;
-}
-.search-btn i{
-    margin-right:5px;
+.logo {
+    width: 175px;
+    height: 52px;
+    object-fit: contain;
+    display: block;
 }
 
-.navbar-toggler{
-    border:none;
-    box-shadow:none !important;
-}
-.navbar-toggler:focus{
-    box-shadow:none;
+.navbar-collapse {
+    align-items: center;
 }
 
-/* Blur Overlay */
-.blur-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.15);
-    backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
-    opacity:0;
-    visibility:hidden;
-    transition:.3s ease;
-    z-index:1040;
-}
-.blur-overlay.show{
-    opacity:1;
-    visibility:visible;
-}
-.navbar-collapse{
-    position:relative;
-    z-index:1060;
+.search-form {
+    width: 100%;
+    max-width: 360px;
+    flex-shrink: 1;
 }
 
-/* Tablet View */
-@media(max-width:992px){
-    .search-form{
-        max-width:300px;
-    }
-    .search-inp{
-        width:180px;
-    }
+.search-inp {
+    width: 100%;
+    min-width: 0;
+    border-radius: 25px;
+    padding: .58rem 1rem;
 }
 
-/* Mobile View */
-@media(max-width:768px){
-    .navbar{
-        padding:.8rem 1rem;
-    }
-    .navbar > .container-fluid{
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-    }
-
-    .navbar-brand{
-        margin-right:auto;
-    }
-
-    .navbar-toggler{
-        margin-left:auto;
-    }
-    .navbar-collapse{
-        margin-top:15px;
-        background:#fff;
-        padding:15px;
-        border-radius:12px;
-        box-shadow:0 4px 12px rgba(0,0,0,.08);
-    }
-    .navbar-nav{
-        text-align:center;
-    }
-    .nav-item{
-        width:100%;
-    }
-    .nav-link{
-        display:block;
-        margin:6px 0;
-        padding:12px;
-    }
-    .logo{
-        height:46px;
-    }
-    .search-form{
-        display:flex;
-        flex-direction:column;
-        width:100%;
-        margin:15px 0;
-    }
-
-    .search-inp{
-        width:100%;
-        margin:0 0 12px 0 !important;
-    }
-
-    .search-btn{
-        width:100%;
-    }
+.search-btn {
+    border-radius: 25px;
+    background: #fe424d;
+    color: #fff;
+    border: none;
+    padding: .58rem 1rem;
+    white-space: nowrap;
+    transition: .2s ease;
 }
 
-/* Small Mobile View */
-@media(max-width:480px){
-
-    .navbar{
-        padding:.7rem .8rem;
-    }
-
-    .nav-link{
-        font-size:15px;
-        padding:10px;
-    }
-    .logo{
-        height:40px;
-    }
-    .search-inp{
-        font-size:14px;
-        padding:10px 15px;
-    }
-
-    .search-btn{
-        font-size:14px;
-        padding:10px;
-    }
+.search-btn:hover {
+    background: #e03150;
+    color: #fff;
 }
 
-@media(max-width:360px){
-    .nav-link{
-        font-size:14px;
-    }
-
-    .search-inp{
-        font-size:13px;
-    }
-
-    .search-btn{
-        font-size:13px;
-    }
+.search-btn i {
+    margin-right: 5px;
 }
 
-</style> 
+.navbar-nav {
+    align-items: center;
+    gap: 2px;
+    flex-wrap: nowrap;
+}
+
+.nav-link {
+    color: #222 !important;
+    margin: 0;
+    padding: .55rem .65rem !important;
+    border-radius: 25px;
+    transition: .2s ease;
+    font-weight: 500;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    background: #f3f3f3;
+}
+
+.nav-link i {
+    margin-right: 4px;
+}
+
+.account-dropdown {
+    position: relative;
+}
+
+.account-btn {
+    border: none;
+    background: transparent;
+    color: #222;
+    padding: .55rem .7rem;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.account-btn:hover {
+    background: #f3f3f3;
+}
+
+.account-btn i {
+    margin-right: 5px;
+}
+
+.account-menu {
+    min-width: 190px;
+    margin-top: 8px !important;
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .12);
+}
+
+.account-menu .dropdown-item {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.account-menu .dropdown-item:hover {
+    background: #f5f5f5;
+}
+
+.account-menu .dropdown-divider {
+    margin: 6px 0;
+}
+
+.logout-item {
+    color: #dc3545 !important;
+}
+
+.logout-item:hover {
+    background: #fff0f1 !important;
+}
+
+.navbar-toggler {
+    border: none;
+    padding: 8px;
+    box-shadow: none !important;
+    flex-shrink: 0;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none !important;
+}
+
+.navbar-toggler-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.blur-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .18);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    opacity: 0;
+    visibility: hidden;
+    transition: .25s ease;
+    z-index: 1040;
+}
+
+.blur-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.navbar-collapse {
+    position: relative;
+    z-index: 1060;
+}
+
+@media (max-width: 1400px) {
+
+    .navbar {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .navbar > .container-fluid {
+        gap: 10px;
+    }
+
+    .logo {
+        width: 155px;
+        height: 48px;
+    }
+
+    .search-form {
+        max-width: 300px;
+    }
+
+    .nav-link,
+    .account-btn {
+        font-size: 14px;
+        padding-left: .5rem;
+        padding-right: .5rem;
+    }
+
+}
+
+@media (max-width: 1200px) {
+
+    .logo {
+        width: 145px;
+        height: 45px;
+    }
+
+    .search-form {
+        max-width: 270px;
+    }
+
+    .nav-link,
+    .account-btn {
+        font-size: 13px;
+    }
+
+}
+
+@media (max-width: 991.98px) {
+
+    .navbar {
+        min-height: 4.5rem;
+        padding: .65rem 1rem;
+    }
+
+    .navbar > .container-fluid {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .navbar-brand {
+        margin-right: auto;
+    }
+
+    .navbar-toggler {
+        margin-left: auto;
+    }
+
+    .navbar-collapse {
+        margin-top: 12px;
+        padding: 15px;
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
+    }
+
+    .search-form {
+        max-width: 100%;
+        margin: 5px 0 18px;
+    }
+
+    .search-inp {
+        width: 100%;
+    }
+
+    .navbar-nav {
+        width: 100%;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+
+    .nav-link {
+        display: block;
+        width: 100%;
+        margin: 4px 0;
+        padding: 11px !important;
+        font-size: 15px;
+    }
+
+    .account-dropdown {
+        width: 100%;
+    }
+
+    .account-btn {
+        width: 100%;
+        padding: 11px;
+        font-size: 15px;
+    }
+
+    .account-menu {
+        position: static !important;
+        float: none;
+        width: 100%;
+        margin: 5px 0 8px !important;
+        box-shadow: none;
+        border: 1px solid #eee;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .navbar {
+        padding: .6rem .75rem;
+    }
+
+    .logo {
+        width: 140px;
+        height: 42px;
+    }
+
+    .navbar-collapse {
+        padding: 12px;
+        border-radius: 12px;
+    }
+
+    .search-form {
+        margin-bottom: 15px;
+    }
+
+    .search-inp {
+        margin-bottom: 10px !important;
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .search-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .nav-link,
+    .account-btn {
+        padding: 10px !important;
+        font-size: 14px;
+    }
+
+}
+
+@media (max-width: 360px) {
+
+    .logo {
+        width: 125px;
+        height: 38px;
+    }
+
+    .navbar {
+        padding-left: .6rem;
+        padding-right: .6rem;
+    }
+
+    .nav-link,
+    .account-btn {
+        font-size: 13px;
+    }
+
+}
+
+</style>
 
 
-<nav class="navbar navbar-expand-md sticky-top">
+<nav class="navbar navbar-expand-lg sticky-top">
+
     <div class="container-fluid">
 
-        <!-- Brand / Logo -->
-        <a class="navbar-brand d-flex align-items-center brand-logo" href="/listings">
+        <a class="navbar-brand" href="/listings">
+
             <img
                 src="https://res.cloudinary.com/dqbzv0bgw/image/upload/v1785670216/ChatGPT_Image_Aug_2_2026_03_52_00_PM_mndiaj.png"
                 alt="Wanderlust Logo"
                 class="logo">
+
         </a>
 
-        <!-- Toggle Button -->
+
         <button
             class="navbar-toggler"
             type="button"
@@ -221,106 +397,208 @@
 
         </button>
 
-        <!-- Menu -->
+
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            <!-- Search -->
+
             <form
-                class="d-flex search-form mx-auto"
+                class="d-flex search-form mx-lg-auto"
                 action="/listings"
                 method="GET">
 
                 <input
-                    class="form-control search-inp me-md-2"
+                    class="form-control search-inp me-lg-2"
                     type="search"
                     name="q"
                     placeholder="Search destinations..."
                     required>
 
                 <button class="btn search-btn" type="submit">
+
                     <i class="fa-solid fa-magnifying-glass"></i>
                     Search
+
                 </button>
 
             </form>
 
-            <!-- Right Menu -->
-            <ul class="navbar-nav ms-md-auto">
+
+            <ul class="navbar-nav ms-lg-auto">
+
 
                 <li class="nav-item">
+
                     <a href="/listings/new" class="nav-link">
+
+                        <i class="fa-solid fa-house"></i>
                         Become a Host
+
                     </a>
+
                 </li>
+
 
                 <% if(!currUser){ %>
 
-                    <li class="nav-item">
-                        <a href="/signup" class="nav-link">
-                            <strong>Sign Up</strong>
-                        </a>
+
+                    <li class="nav-item dropdown account-dropdown">
+
+                        <button
+                            class="account-btn dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+
+                            <i class="fa-solid fa-user"></i>
+                            Account
+
+                        </button>
+
+
+                        <ul class="dropdown-menu dropdown-menu-end account-menu">
+
+                            <li>
+
+                                <a href="/signup" class="dropdown-item">
+
+                                    <i class="fa-solid fa-user-plus me-2"></i>
+                                    Sign Up
+
+                                </a>
+
+                            </li>
+
+
+                            <li>
+
+                                <a href="/login" class="dropdown-item">
+
+                                    <i class="fa-solid fa-right-to-bracket me-2"></i>
+                                    Log In
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
                     </li>
 
-                    <li class="nav-item">
-                        <a href="/login" class="nav-link">
-                            <strong>Log In</strong>
-                        </a>
-                    </li>
 
                 <% } %>
+
 
                 <% if(currUser){ %>
 
-                    <li class="nav-item">
-                        <a href="/listings/favourites" class="nav-link">
-                            <i class="fa-solid fa-heart text-danger"></i>
-                            Favourite
-                        </a>
-                    </li>
 
                     <li class="nav-item">
-                        <a href="/profile" class="nav-link">
-                            <i class="fa-solid fa-user text-dark"></i>
-                            Profile
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
                         <a href="/bookings/my" class="nav-link">
+
                             <i class="fa-solid fa-calendar-check text-primary"></i>
                             My Bookings
+
                         </a>
+
                     </li>
 
+
                     <li class="nav-item">
+
                         <a href="/bookings/owner" class="nav-link">
+
                             <i class="fa-solid fa-users text-success"></i>
                             Received Bookings
+
                         </a>
+
                     </li>
 
-                    <li class="nav-item">
-                        <a href="/logout" class="nav-link">
-                            <strong>Log Out</strong>
-                        </a>
+
+                    <li class="nav-item dropdown account-dropdown">
+
+                        <button
+                            class="account-btn dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+
+                            <i class="fa-solid fa-user-circle"></i>
+                            Account
+
+                        </button>
+
+
+                        <ul class="dropdown-menu dropdown-menu-end account-menu">
+
+                            <li>
+
+                                <a href="/profile" class="dropdown-item">
+
+                                    <i class="fa-solid fa-user me-2"></i>
+                                    Profile
+
+                                </a>
+
+                            </li>
+
+
+                            <li>
+
+                                <a href="/listings/favourites" class="dropdown-item">
+
+                                    <i class="fa-solid fa-heart text-danger me-2"></i>
+                                    Favourite
+
+                                </a>
+
+                            </li>
+
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+
+                            <li>
+
+                                <a href="/logout" class="dropdown-item logout-item">
+
+                                    <i class="fa-solid fa-right-from-bracket me-2"></i>
+                                    Log Out
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
                     </li>
+
 
                 <% } %>
+
 
             </ul>
 
         </div>
 
     </div>
+
 </nav>
+
 
 <div class="blur-overlay" id="blurOverlay"></div>
 
+
 <script>
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const navbar = document.getElementById("navbarNav");
     const overlay = document.getElementById("blurOverlay");
+
+    if (!navbar || !overlay) return;
 
     navbar.addEventListener("show.bs.collapse", () => {
         overlay.classList.add("show");
@@ -335,4 +613,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
 </script>

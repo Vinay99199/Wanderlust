@@ -91,7 +91,7 @@ module.exports.createOrder = async (req, res) => {
     console.log("Create Order Hit");
 
     const { listingId } = req.params;
-    const { checkIn, checkOut, guests } = req.body;
+    const { checkIn, checkOut, guests, couponCode } = req.body;
 
     const listing = await Listing.findById(listingId);
 
@@ -160,7 +160,29 @@ module.exports.createOrder = async (req, res) => {
     }
 
     // COMPLETE BOOKING AMOUNT
-    const totalPrice = nights * listing.price;
+    const originalPrice = nights * listing.price;
+
+    let discountPercent = 0;
+    let discountAmount = 0;
+
+    // Discount Coupon
+    if (couponCode) {
+      const code = couponCode.trim().toUpperCase();
+
+      if (code === "WANDER10") {
+        discountPercent = 10;
+        discountAmount = Math.round(
+          (originalPrice * discountPercent) / 100
+        );
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid coupon code.",
+        });
+      }
+    }
+
+    const totalPrice = originalPrice - discountAmount;
 
     const options = {
       amount: totalPrice * 100,
@@ -170,9 +192,23 @@ module.exports.createOrder = async (req, res) => {
 
     const order = await razorpay.orders.create(options);
 
-    console.log("Order:", order);
+    console.log("CREATE ORDER BODY =>", req.body);
+    console.log("PRICE =>", {
+      originalPrice,
+      discountPercent,
+      discountAmount,
+      totalPrice
+    });
 
-    res.json(order);
+    return res.json({
+      id: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      originalPrice,
+      discountPercent,
+      discountAmount,
+      finalPrice: totalPrice
+    });
   } catch (err) {
     console.log("RAZORPAY ERROR =>", err);
 
@@ -465,6 +501,8 @@ module.exports.updateBookingStatus = async (req, res) => {
   }
 };
 
+
+
 module.exports.verifyPayment = async (req, res) => {
   console.log(req.body);
 
@@ -475,17 +513,13 @@ module.exports.verifyPayment = async (req, res) => {
       razorpay_signature,
       checkIn,
       checkOut,
-      guests
+      guests,
+      couponCode
     } = req.body;
 
     const { listingId } = req.params;
 
-    // BASIC VALIDATION
-    if (
-      !razorpay_order_id ||
-      !razorpay_payment_id ||
-      !razorpay_signature
-    ) {
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
         success: false,
         message: "Payment details are missing."
@@ -509,17 +543,10 @@ module.exports.verifyPayment = async (req, res) => {
     const inDate = new Date(checkIn);
     const outDate = new Date(checkOut);
 
-    if (isNaN(inDate) || isNaN(outDate)) {
+    if (isNaN(inDate) || isNaN(outDate) || outDate <= inDate) {
       return res.status(400).json({
         success: false,
         message: "Invalid booking dates."
-      });
-    }
-
-    if (outDate <= inDate) {
-      return res.status(400).json({
-        success: false,
-        message: "Check Out must be after Check In."
       });
     }
 
@@ -527,24 +554,10 @@ module.exports.verifyPayment = async (req, res) => {
       (outDate - inDate) / (1000 * 60 * 60 * 24)
     );
 
-    if (nights <= 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid booking dates."
-      });
-    }
-
-    // VERIFY RAZORPAY PAYMENT SIGNATURE
-    const body =
-      razorpay_order_id +
-      "|" +
-      razorpay_payment_id;
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
 
     const expectedSignature = crypto
-      .createHmac(
-        "sha256",
-        process.env.RAZORPAY_KEY_SECRET
-      )
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(body)
       .digest("hex");
 
@@ -555,7 +568,6 @@ module.exports.verifyPayment = async (req, res) => {
       });
     }
 
-    // CHECK DUPLICATE PAYMENT
     const existingPayment = await Booking.findOne({
       razorpayPaymentId: razorpay_payment_id
     });
@@ -567,7 +579,6 @@ module.exports.verifyPayment = async (req, res) => {
       });
     }
 
-    // LISTING CHECK
     const listing = await Listing.findById(listingId);
 
     if (!listing) {
@@ -577,7 +588,6 @@ module.exports.verifyPayment = async (req, res) => {
       });
     }
 
-    // OWNER CANNOT BOOK OWN LISTING
     if (listing.owner.equals(req.user._id)) {
       return res.status(400).json({
         success: false,
@@ -585,31 +595,44 @@ module.exports.verifyPayment = async (req, res) => {
       });
     }
 
-    // CALCULATE TOTAL PRICE
-    const totalPrice = nights * listing.price;
+    const originalPrice = nights * listing.price;
 
-    // FINAL AVAILABILITY CHECK
+    let discountPercent = 0;
+    let discountAmount = 0;
+
+    if (couponCode) {
+      const code = couponCode.trim().toUpperCase();
+
+      if (code === "WANDER10") {
+        discountPercent = 10;
+        discountAmount = Math.round(
+          (originalPrice * discountPercent) / 100
+        );
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid coupon code."
+        });
+      }
+    }
+
+    const totalPrice = originalPrice - discountAmount;
+
     const existingBooking = await Booking.findOne({
       listing: listingId,
-
       bookingStatus: {
         $in: ["Pending", "Confirmed"]
       },
-
       checkIn: {
         $lt: outDate
       },
-
       checkOut: {
         $gt: inDate
       }
     });
 
-    // PAYMENT SUCCESSFUL BUT
-    // DATES ARE NO LONGER AVAILABLE
     if (existingBooking) {
       try {
-        // Fetch actual Razorpay payment
         const payment = await razorpay.payments.fetch(
           razorpay_payment_id
         );
@@ -627,7 +650,6 @@ module.exports.verifyPayment = async (req, res) => {
           });
         }
 
-        // Refund actual captured amount
         const refund = await razorpay.payments.refund(
           razorpay_payment_id,
           {
@@ -645,57 +667,39 @@ module.exports.verifyPayment = async (req, res) => {
           amount: refund.amount,
           status: refund.status
         });
-
       } catch (refundError) {
-        console.error(
-          "AUTO REFUND ERROR:",
-          refundError
-        );
+        console.error("AUTO REFUND ERROR:", refundError);
 
         return res.status(500).json({
           success: false,
-          message:
-            "Payment was successful, but the booking dates are no longer available. Please contact support for the refund."
+          message: "Payment was successful, but the booking dates are no longer available. Please contact support for the refund."
         });
       }
 
       return res.status(400).json({
         success: false,
-        message:
-          "Sorry! These dates have already been booked. Your payment has been refunded."
+        message: "Sorry! These dates have already been booked. Your payment has been refunded."
       });
     }
 
-    // CREATE BOOKING
     const booking = new Booking({
       listing: listing._id,
-
       guest: req.user._id,
-
       owner: listing.owner,
-
       checkIn: inDate,
-
       checkOut: outDate,
-
       guests: Number(guests),
-
       nights,
-
       pricePerNight: listing.price,
-
+      originalPrice,
+      discountPercent,
+      discountAmount,
       totalPrice,
-
       bookingStatus: "Pending",
-
       paymentStatus: "Paid",
-
       razorpayOrderId: razorpay_order_id,
-
       razorpayPaymentId: razorpay_payment_id,
-
       razorpaySignature: razorpay_signature,
-
       refundStatus: "Not Requested"
     });
 
@@ -707,17 +711,13 @@ module.exports.verifyPayment = async (req, res) => {
       paymentId: booking.razorpayPaymentId
     });
 
-    // SUCCESS RESPONSE
     return res.json({
       success: true,
       message: "Payment Verified & Booking Created"
     });
 
   } catch (err) {
-    console.error(
-      "VERIFY PAYMENT ERROR:",
-      err
-    );
+    console.error("VERIFY PAYMENT ERROR:", err);
 
     return res.status(500).json({
       success: false,

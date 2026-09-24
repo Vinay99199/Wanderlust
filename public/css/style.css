@@ -438,3 +438,15 @@ body {
     height: 400px;
     width: 80vh;
 }
+
+/* @media (max-width: 991.98px) {
+    body {
+        padding-top: 4.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        padding-top: 4.3rem;
+    }
+} */

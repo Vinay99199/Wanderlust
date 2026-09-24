@@ -83,40 +83,56 @@
                                 <form id="bookingForm">
                                     <div class="mb-3">
                                         <label class="form-label">Check In</label>
-                                        <input
-                                            type="date"
-                                            class="form-control"
-                                            name="checkIn"
-                                            id="checkIn"
-                                            required
-                                        />
+                                        <input type="date" class="form-control" name="checkIn" id="checkIn" required />
                                     </div>
-
+                                
                                     <div class="mb-3">
                                         <label class="form-label">Check Out</label>
-                                        <input
-                                            type="date"
-                                            class="form-control"
-                                            name="checkOut"
-                                            id="checkOut"
-                                            required
-                                        />
+                                        <input type="date" class="form-control" name="checkOut" id="checkOut" required />
                                     </div>
-
+                                
                                     <div class="mb-3">
                                         <label class="form-label">Guests</label>
-                                        <input
-                                            type="number"
-                                            class="form-control"
-                                            name="guests"
-                                            id="guests"
-                                            value="1"
-                                            min="1"
-                                            max="20"
-                                            required
-                                        />
+                                        <input type="number" class="form-control" name="guests" id="guests" value="1" min="1" max="20" required />
                                     </div>
-
+                                
+                                    <!-- Coupon Code -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Coupon Code</label>
+                                
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code" />
+                                
+                                            <button type="button" class="btn btn-dark" id="applyCoupon">
+                                                Apply
+                                            </button>
+                                        </div>
+                                
+                                        <small class="text-muted">
+                                            Use <strong>WANDER10</strong> for 10% off
+                                        </small>
+                                
+                                        <div id="couponMessage" class="mt-2"></div>
+                                    </div>
+                                
+                                    <!-- Price Details -->
+                                    <div id="priceDetails" class="mb-3" style="display:none;">
+                                        <p class="mb-1">
+                                            <strong>Original Price:</strong>
+                                            ₹<span id="originalPrice">0</span>
+                                        </p>
+                                
+                                        <p class="mb-1 text-success">
+                                            <strong>Discount:</strong>
+                                            - ₹<span id="discountAmount">0</span>
+                                        </p>
+                                
+                                        <p class="mb-2">
+                                            <strong>Total Price:</strong>
+                                            ₹<span id="finalPrice">0</span>
+                                        </p>
+                                    </div>
+                                
                                     <button type="button" id="payBtn" class="btn btn-danger w-100">
                                         Pay & Book
                                     </button>
@@ -242,9 +258,51 @@
 
     <script src="/js/map.js"></script>
 
-
 <script>
 const payBtn = document.getElementById("payBtn");
+const applyCoupon = document.getElementById("applyCoupon");
+
+if (applyCoupon) {
+    applyCoupon.addEventListener("click", () => {
+        const couponCode = document.getElementById("couponCode").value.trim().toUpperCase();
+        const checkIn = document.getElementById("checkIn").value;
+        const checkOut = document.getElementById("checkOut").value;
+
+        if (!checkIn || !checkOut) {
+            alert("Please select Check In and Check Out dates first.");
+            return;
+        }
+
+        if (!couponCode) {
+            alert("Please enter coupon code.");
+            return;
+        }
+
+        if (couponCode !== "WANDER10") {
+            document.getElementById("couponMessage").innerHTML =
+                '<span class="text-danger">Invalid coupon code.</span>';
+            return;
+        }
+
+        const nights = Math.ceil(
+            (new Date(checkOut) - new Date(checkIn)) /
+            (1000 * 60 * 60 * 24)
+        );
+
+        const originalPrice = nights * <%= listing.price %>;
+        const discountAmount = Math.round(originalPrice * 10 / 100);
+        const finalPrice = originalPrice - discountAmount;
+
+        document.getElementById("originalPrice").innerText = originalPrice;
+        document.getElementById("discountAmount").innerText = discountAmount;
+        document.getElementById("finalPrice").innerText = finalPrice;
+
+        document.getElementById("priceDetails").style.display = "block";
+
+        document.getElementById("couponMessage").innerHTML =
+            '<span class="text-success">Coupon applied successfully!</span>';
+    });
+}
 
 if (payBtn) {
     payBtn.addEventListener("click", async () => {
@@ -252,6 +310,7 @@ if (payBtn) {
             const checkIn = document.getElementById("checkIn").value;
             const checkOut = document.getElementById("checkOut").value;
             const guests = document.getElementById("guests").value;
+            const couponCode = document.getElementById("couponCode").value.trim().toUpperCase();
 
             if (!checkIn || !checkOut) {
                 alert("Please select Check In and Check Out dates.");
@@ -263,35 +322,39 @@ if (payBtn) {
                 return;
             }
 
-            // Create Razorpay Order
             const response = await fetch(
                 "/bookings/<%= listing._id %>/create-order",
                 {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ checkIn, checkOut, guests })
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        checkIn,
+                        checkOut,
+                        guests,
+                        couponCode
+                    })
                 }
             );
 
             const result = await response.json();
+
+            console.log("PAY ORDER RESULT =>", result);
 
             if (!response.ok) {
                 alert(result.message || "These dates are not available.");
                 return;
             }
 
-            const order = result;
-
-            // Razorpay Options
             const options = {
                 key: "<%= process.env.RAZORPAY_KEY_ID %>",
-                amount: order.amount,
-                currency: order.currency,
+                amount: result.amount,
+                currency: result.currency,
                 name: "Wanderlust",
                 description: "Listing Booking",
-                order_id: order.id,
+                order_id: result.id,
 
-                // Payment Success
                 handler: async function (payment) {
                     try {
                         const verify = await fetch(
@@ -307,7 +370,8 @@ if (payBtn) {
                                     razorpay_signature: payment.razorpay_signature,
                                     checkIn,
                                     checkOut,
-                                    guests
+                                    guests,
+                                    couponCode
                                 })
                             }
                         );
@@ -318,10 +382,7 @@ if (payBtn) {
                             alert("Payment Successful & Booking Confirmed");
                             window.location.href = "/bookings/my";
                         } else {
-                            alert(
-                                result.message ||
-                                "Booking could not be completed."
-                            );
+                            alert(result.message || "Booking could not be completed.");
                         }
 
                     } catch (err) {
@@ -330,7 +391,6 @@ if (payBtn) {
                     }
                 },
 
-                // User closes Razorpay
                 modal: {
                     ondismiss: function () {
                         console.log("Razorpay Checkout closed by user.");

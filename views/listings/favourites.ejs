@@ -26,6 +26,7 @@
     }
 
     .listing-image {
+        display: block;
         width: 100%;
         height: 230px;
         object-fit: cover;
@@ -44,19 +45,59 @@
         padding: 18px;
     }
 
+    .listing-info {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        min-height: 24px !important;
+        margin-bottom: 15px !important;
+        padding: 0 !important;
+    }
+
     .listing-title {
-        margin-bottom: 8px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #222;
+        display: block !important;
+        width: calc(100% - 130px) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 17px !important;
+        font-weight: 600 !important;
+        color: #222 !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        line-height: 24px !important;
     }
 
     .listing-price {
-        margin-bottom: 15px;
-        color: #555;
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        display: block !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 14px !important;
+        color: #555 !important;
+        white-space: nowrap !important;
+        line-height: 24px !important;
+        text-align: right !important;
+    }
+
+    .listing-price strong {
+        color: #222 !important;
+        font-size: 15px !important;
+        white-space: nowrap !important;
+    }
+
+    .listing-price span {
+        color: #777 !important;
+        font-size: 13px !important;
+        white-space: nowrap !important;
     }
 
     .remove-favourite {
+        display: block;
         width: 100%;
         padding: 9px 15px;
         background: #fff;
@@ -120,6 +161,23 @@
         .listing-image {
             height: 210px;
         }
+
+        .listing-title {
+            width: calc(100% - 115px) !important;
+            font-size: 16px !important;
+        }
+
+        .listing-price {
+            font-size: 13px !important;
+        }
+
+        .listing-price strong {
+            font-size: 14px !important;
+        }
+
+        .listing-price span {
+            font-size: 12px !important;
+        }
     }
 </style>
 
@@ -134,13 +192,8 @@
 
         <div class="empty-favourites">
             <i class="fa-regular fa-heart"></i>
-
             <h4>No Favourite Listings Yet</h4>
-
-            <p>
-                Save your favourite places here and find them easily later.
-            </p>
-
+            <p>Save your favourite places here and find them easily later.</p>
             <a href="/listings" class="btn explore-btn">
                 Explore Listings
             </a>
@@ -158,46 +211,47 @@
 
                         <a
                             href="/listings/<%= listing._id %>"
-                            class="listing-link">
-
+                            class="listing-link"
+                        >
                             <img
                                 src="<%= listing.image.url %>"
                                 class="listing-image card-img-top"
-                                alt="<%= listing.title %>">
-
+                                alt="<%= listing.title %>"
+                            >
                         </a>
 
                         <div class="card-body">
 
-                            <a
-                                href="/listings/<%= listing._id %>"
-                                class="listing-link">
+                            <div class="listing-info">
 
-                                <h5 class="listing-title">
+                                <a
+                                    href="/listings/<%= listing._id %>"
+                                    class="listing-title"
+                                >
                                     <%= listing.title %>
-                                </h5>
+                                </a>
 
-                                <p class="listing-price">
-                                    ₹ <%= listing.price.toLocaleString("en-IN") %>
-                                    / night
-                                </p>
+                                <div class="listing-price">
+                                    <strong>
+                                        ₹<%= listing.price.toLocaleString("en-IN") %>
+                                    </strong>
+                                    <span>/ night</span>
+                                </div>
 
-                            </a>
+                            </div>
 
                             <form
                                 action="/listings/<%= listing._id %>/wishlist"
                                 method="POST"
-                                class="remove-favourite-form">
-
+                                class="remove-favourite-form"
+                            >
                                 <button
                                     type="submit"
-                                    class="btn remove-favourite">
-
+                                    class="btn remove-favourite"
+                                >
                                     <i class="fa-solid fa-heart-crack me-1"></i>
                                     Remove Favourite
-
                                 </button>
-
                             </form>
 
                         </div>
@@ -215,31 +269,44 @@
 </div>
 
 <script>
-    document.querySelectorAll('.remove-favourite-form').forEach(form => {
-        form.addEventListener('submit', async function (e) {
-            e.preventDefault();
+document.querySelectorAll(".remove-favourite-form").forEach(form => {
 
-            try {
-                const response = await fetch(this.action, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                    }
-                });
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
 
-                if (!response.ok) {
-                    throw new Error('Remove favourite failed');
+        try {
+            const response = await fetch(this.action, {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json"
                 }
+            });
 
-                const data = await response.json();
+            const contentType = response.headers.get("content-type");
 
-                if (data.success) {
-                    window.location.href = '/listings/favourites';
-                }
-            } catch (error) {
-                console.error('Remove favourite error:', error);
-                window.location.reload();
+            if (!response.ok) {
+                const text = await response.text();
+                console.error("WISHLIST RESPONSE:", text);
+                throw new Error("Remove favourite failed");
             }
-        });
+
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await response.text();
+                console.error("EXPECTED JSON BUT GOT:", text);
+                throw new Error("Server returned HTML instead of JSON");
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                window.location.href = "/listings/favourites";
+            }
+
+        } catch (error) {
+            console.error("Remove favourite error:", error);
+            window.location.reload();
+        }
     });
+
+});
 </script>

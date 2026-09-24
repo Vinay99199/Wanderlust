@@ -49,38 +49,49 @@ router.get(
 
 
 // Wishlist
-
 router.post(
     "/:id/wishlist",
     isLoggedIn,
     async (req, res) => {
-        const listingId = req.params.id;
-        const user = await User.findById(req.user._id);
+        try {
+            const listingId = req.params.id;
 
-        if (user.wishlist.includes(listingId)) {
-            user.wishlist.pull(listingId);
-        } else {
-            user.wishlist.push(listingId);
-        }
+            const user = await User.findById(req.user._id);
 
-        await user.save();
+            if (!user) {
+                return res.status(401).json({
+                    success: false,
+                    message: "User not found"
+                });
+            }
 
-        const isFavourite = user.wishlist.includes(listingId);
-        const wantsJson = req.xhr
-            || req.headers.accept?.includes("application/json")
-            || req.headers["content-type"] === "application/json";
+            if (user.wishlist.includes(listingId)) {
+                user.wishlist.pull(listingId);
+            } else {
+                user.wishlist.push(listingId);
+            }
 
-        if (wantsJson) {
+            await user.save();
+
+            const isFavourite = user.wishlist.some(
+                id => id.toString() === listingId.toString()
+            );
+
             return res.json({
                 success: true,
-                isFavourite,
+                isFavourite
+            });
+
+        } catch (error) {
+            console.error("WISHLIST ERROR:", error);
+
+            return res.status(500).json({
+                success: false,
+                message: "Failed to update favourite"
             });
         }
-
-        return res.redirect("/listings/favourites");
     }
 );
-
 
 // Show, Update & Delete
 

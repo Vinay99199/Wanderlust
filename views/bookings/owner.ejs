@@ -1,210 +1,743 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="container mt-4">
+<div class="container-fluid bookings-page">
 
-    <h2 class="mb-4">
-        <i class="fa-solid fa-calendar-check text-success"></i>
-        Received Bookings
-    </h2>
+    <div class="bookings-header">
+        <div>
+            <h2>
+                <i class="fa-solid fa-calendar-check"></i>
+                Received Bookings
+            </h2>
+            <p>Manage bookings received for your listings</p>
+        </div>
+
+        <span class="booking-count">
+            <i class="fa-regular fa-calendar"></i>
+            <%= bookings.length %> Booking<%= bookings.length !== 1 ? "s" : "" %>
+        </span>
+    </div>
 
     <% if(bookings.length === 0){ %>
 
-        <div class="alert alert-info">
-            No one has booked your listings yet.
+        <div class="empty-bookings">
+            <i class="fa-regular fa-calendar-xmark"></i>
+            <h4>No bookings yet</h4>
+            <p>No one has booked your listings yet.</p>
         </div>
 
     <% } else { %>
 
-    <div class="table-responsive">
-
-        <table class="table table-bordered table-hover align-middle">
-
-            <thead class="table-dark text-center">
-
-                <tr>
-                    <th>Image</th>
-                    <th>Listing</th>
-                    <th>Guest</th>
-                    <th>Email</th>
-                    <th>Check In</th>
-                    <th>Check Out</th>
-                    <th>Guests</th>
-                    <th>Total</th>
-                    <th>Payment</th>
-                    <th>Status</th>
-                    <th>Booked On</th>
-                    <th>Action</th>
-                </tr>
-
-            </thead>
-
-            <tbody>
+        <div class="booking-grid">
 
             <% bookings.forEach(booking => { %>
 
-                <tr>
+                <div class="booking-card">
 
-                    <!-- Image -->
-                    <td class="text-center">
-                        <% if(booking.listing && booking.listing.image){ %>
+                    <div class="booking-top">
 
-                        <img
-                            src="<%= booking.listing.image.url %>"
-                            style="width:90px;height:70px;object-fit:cover;border-radius:8px;">
+                        <div class="listing-info">
 
-                        <% } %>
-                    </td>
+                            <% if(booking.listing && booking.listing.image){ %>
 
-                    <!-- Listing -->
-                    <td>
-                        <% if (booking.listing) { %>
+                                <img
+                                    src="<%= booking.listing.image.url %>"
+                                    alt="Listing"
+                                    class="listing-image"
+                                >
 
-                            <strong><%= booking.listing.title %></strong>
-                            <br>
-                            <small class="text-muted">
-                                <%= booking.listing.location %>,
-                                <%= booking.listing.country %>
+                            <% } else { %>
+
+                                <div class="listing-image no-image">
+                                    <i class="fa-solid fa-house"></i>
+                                </div>
+
+                            <% } %>
+
+                            <div class="listing-text">
+
+                                <% if(booking.listing){ %>
+
+                                    <h4>
+                                        <%= booking.listing.title %>
+                                    </h4>
+
+                                    <p>
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <%= booking.listing.location %>,
+                                        <%= booking.listing.country %>
+                                    </p>
+
+                                <% } else { %>
+
+                                    <h4 class="text-danger">
+                                        Listing Deleted
+                                    </h4>
+
+                                <% } %>
+
+                            </div>
+
+                        </div>
+
+                        <div class="booking-status">
+
+                            <% if(booking.bookingStatus === "Confirmed"){ %>
+
+                                <span class="status confirmed">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    Confirmed
+                                </span>
+
+                            <% } else if(booking.bookingStatus === "Cancelled"){ %>
+
+                                <span class="status cancelled">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    Cancelled
+                                </span>
+
+                            <% } else if(booking.bookingStatus === "Completed"){ %>
+
+                                <span class="status completed">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    Completed
+                                </span>
+
+                            <% } else { %>
+
+                                <span class="status pending">
+                                    <i class="fa-solid fa-clock"></i>
+                                    Pending
+                                </span>
+
+                            <% } %>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="price-box">
+
+                        <strong>₹<%= booking.totalPrice %></strong>
+
+                        <% if(booking.discountAmount && booking.discountAmount > 0){ %>
+
+                            <span>
+                                <i class="fa-solid fa-tag"></i>
+                                ₹<%= booking.discountAmount %> off
+                            </span>
+
+                            <small>
+                                Original ₹<%= booking.originalPrice %>
                             </small>
 
-                        <% } else { %>
-
-                            <span class="text-danger">Listing Deleted</span>
-
                         <% } %>
-                    </td>
 
-                    <!-- Guest -->
-                    <td>
-                        <%= booking.guest.username %>
-                    </td>
+                    </div>
 
-                    <!-- Email -->
-                    <td>
-                        <%= booking.guest.email %>
-                    </td>
 
-                    <!-- CheckIn -->
-                    <td>
-                        <%= new Date(booking.checkIn).toLocaleDateString("en-IN") %>
-                    </td>
+                    <div class="booking-details">
 
-                    <!-- CheckOut -->
-                    <td>
-                        <%= new Date(booking.checkOut).toLocaleDateString("en-IN") %>
-                    </td>
+                        <div class="detail-item">
+                            <i class="fa-solid fa-user"></i>
+                            <div>
+                                <strong><%= booking.guest.username %></strong>
+                                <small><%= booking.guest.email %></small>
+                            </div>
+                        </div>
 
-                    <!-- Guests -->
-                    <td class="text-center">
-                        <%= booking.guests %>
-                    </td>
+                        <div class="detail-item">
+                            <i class="fa-regular fa-calendar"></i>
+                            <div>
+                                <strong>
+                                    <%= new Date(booking.checkIn).toLocaleDateString("en-IN") %>
+                                    →
+                                    <%= new Date(booking.checkOut).toLocaleDateString("en-IN") %>
+                                </strong>
+                                <small>
+                                    <%= booking.nights %> night<%= booking.nights !== 1 ? "s" : "" %>
+                                </small>
+                            </div>
+                        </div>
 
-                    <!-- Amount -->
-                    <td>
-                        ₹ <%= booking.totalPrice %>
-                    </td>
+                        <div class="detail-item">
+                            <i class="fa-solid fa-users"></i>
+                            <div>
+                                <strong>
+                                    <%= booking.guests %> Guest<%= booking.guests !== 1 ? "s" : "" %>
+                                </strong>
+                                <small>Number of guests</small>
+                            </div>
+                        </div>
 
-                    <!-- Payment -->
-                    <td>
-                        <% if(booking.paymentStatus==="Paid" ){ %>
-                    
-                            <span class="badge bg-success">
-                                Paid
-                            </span>
-                    
-                            <% } else if(booking.paymentStatus==="Refunded" ){ %>
-                            
-                                <span class="badge bg-info text-dark">
+                    </div>
+
+
+                    <div class="booking-footer">
+
+                        <div class="payment-info">
+
+                            <% if(booking.paymentStatus === "Paid"){ %>
+
+                                <span class="payment paid">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    Paid
+                                </span>
+
+                            <% } else if(booking.paymentStatus === "Refunded"){ %>
+
+                                <span class="payment refunded">
+                                    <i class="fa-solid fa-rotate-left"></i>
                                     Refunded
                                 </span>
-                            
+
                             <% } else { %>
-                            <span class="badge bg-warning text-dark"> Pending </span>
-                        <% } %>
-                    </td>
 
-                    
-                    <!-- Booking Status -->
-                    <td>
+                                <span class="payment pending-payment">
+                                    <i class="fa-solid fa-clock"></i>
+                                    Pending
+                                </span>
 
-                        <% if(booking.bookingStatus==="Confirmed"){ %>
-
-                            <span class="badge bg-success">
-                                Confirmed
-                            </span>
-
-                        <% } else if(booking.bookingStatus==="Cancelled"){ %>
-
-                            <span class="badge bg-danger">
-                                Cancelled
-                            </span>
-
-                        <% } else if(booking.bookingStatus==="Completed"){ %>
-
-                            <span class="badge bg-primary">
-                                Completed
-                            </span>
-
-                        <% } else { %>
-
-                            <span class="badge bg-warning text-dark">
-                                Pending
-                            </span>
-
-                        <% } %>
-
-                    </td>
-
-                    <!-- Booking Date -->
-                    <td>
-                        <%= new Date(booking.createdAt).toLocaleDateString("en-IN") %>
-                    </td>
-
-                    <!-- Action -->
-                    <td>
-                    
-                        <% if (booking.listing) { %>
-
-                            <a href="/listings/<%= booking.listing._id %>" class="btn btn-primary btn-sm w-100 mb-2">
-                                View Listing
-                            </a>
-
-                        <% } %>
-                    
-                        <% if(booking.bookingStatus==="Pending" ){ %>
-                            <form action="/bookings/<%= booking._id %>/status?_method=PUT" method="POST" class="mb-2">
-                    
-                                <input type="hidden" name="status" value="Confirmed">
-                                <button class="btn btn-success btn-sm w-100">
-                                    Confirm
-                                </button>
-
-                            </form>
-                    
-                            <form action="/bookings/<%= booking._id %>/status?_method=PUT" method="POST">
-                    
-                                <input type="hidden" name="status" value="Cancelled">
-                    
-                                <button class="btn btn-danger btn-sm w-100">
-                                    Cancel
-                                </button>
-                    
-                            </form>
-                    
                             <% } %>
-                                <% if(booking.bookingStatus==="Confirmed" ){ %>
-                                    <form action="/bookings/<%= booking._id %>/status?_method=PUT" method="POST">
-                                        <input type="hidden" name="status" value="Completed">
-                                        <button class="btn btn-primary btn-sm w-100">
-                                            Complete
+
+                            <span class="booked-date">
+                                <i class="fa-regular fa-calendar"></i>
+                                Booked on
+                                <%= new Date(booking.createdAt).toLocaleDateString("en-IN") %>
+                            </span>
+
+                        </div>
+
+
+                        <div class="booking-actions">
+
+                            <% if(booking.listing){ %>
+
+                                <a
+                                    href="/listings/<%= booking.listing._id %>"
+                                    class="view-btn"
+                                >
+                                    <i class="fa-regular fa-eye"></i>
+                                    View Listing
+                                </a>
+
+                            <% } %>
+
+
+                            <% if(booking.bookingStatus === "Pending"){ %>
+
+                                <div class="action-buttons">
+
+                                    <form
+                                        action="/bookings/<%= booking._id %>/status?_method=PUT"
+                                        method="POST"
+                                    >
+                                        <input type="hidden" name="status" value="Confirmed">
+
+                                        <button type="submit" class="confirm-btn">
+                                            <i class="fa-solid fa-check"></i>
+                                            Confirm
                                         </button>
-                    
                                     </form>
-                                    <% } %>
-                    </td>
-                </tr>
+
+                                    <form
+                                        action="/bookings/<%= booking._id %>/status?_method=PUT"
+                                        method="POST"
+                                    >
+                                        <input type="hidden" name="status" value="Cancelled">
+
+                                        <button type="submit" class="cancel-btn">
+                                            <i class="fa-solid fa-xmark"></i>
+                                            Cancel
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                            <% } else if(booking.bookingStatus === "Confirmed"){ %>
+
+                                <form
+                                    action="/bookings/<%= booking._id %>/status?_method=PUT"
+                                    method="POST"
+                                >
+                                    <input type="hidden" name="status" value="Completed">
+
+                                    <button type="submit" class="complete-btn">
+                                        <i class="fa-solid fa-check-double"></i>
+                                        Complete
+                                    </button>
+                                </form>
+
+                            <% } %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             <% }) %>
-            </tbody>
-        </table>
-    </div>
+
+        </div>
+
     <% } %>
+
 </div>
+
+
+<style>
+.bookings-page {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 35px 35px 60px;
+    background: #f8fafc;
+    min-height: calc(100vh - 80px);
+}
+
+.bookings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.bookings-header h2 {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 700;
+    color: #18283f;
+}
+
+.bookings-header h2 i {
+    color: #159447;
+    margin-right: 10px;
+}
+
+.bookings-header p {
+    margin: 5px 0 0;
+    color: #718096;
+    font-size: 16px;
+}
+
+.booking-count {
+    background: #20262d;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.booking-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.booking-card {
+    background: white;
+    border: 1px solid #e5eaf0;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 3px 12px rgba(20, 30, 50, 0.05);
+    min-width: 0;
+}
+
+.booking-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.listing-info {
+    display: flex;
+    gap: 15px;
+    min-width: 0;
+}
+
+.listing-image {
+    width: 125px;
+    height: 100px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.no-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f1f3f5;
+    color: #9aa4af;
+    font-size: 30px;
+}
+
+.listing-text {
+    min-width: 0;
+}
+
+.listing-text h4 {
+    margin: 4px 0 8px;
+    color: #17283f;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.listing-text p {
+    margin: 0;
+    color: #718096;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.listing-text p i {
+    margin-right: 4px;
+}
+
+.booking-status {
+    flex-shrink: 0;
+}
+
+.status,
+.payment {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 13px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.confirmed,
+.completed {
+    background: #dcf5e8;
+    color: #16844a;
+}
+
+.pending {
+    background: #fff0cf;
+    color: #a96900;
+}
+
+.cancelled {
+    background: #ffe1e5;
+    color: #d92d43;
+}
+
+.price-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: -50px;
+    margin-bottom: 20px;
+}
+
+.price-box strong {
+    font-size: 22px;
+    color: #17283f;
+}
+
+.price-box span {
+    color: #159447;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.price-box small {
+    color: #8993a0;
+    text-decoration: line-through;
+    margin-top: 2px;
+}
+
+.booking-details {
+    border-top: 1px solid #e8edf2;
+    border-bottom: 1px solid #e8edf2;
+    padding: 18px 0;
+    display: grid;
+    grid-template-columns: 1fr 1.35fr 1fr;
+    gap: 12px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+}
+
+.detail-item > i {
+    color: #617188;
+    margin-top: 3px;
+}
+
+.detail-item strong,
+.detail-item small {
+    display: block;
+}
+
+.detail-item strong {
+    color: #334155;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.detail-item small {
+    color: #8993a0;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.booking-footer {
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.payment-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+}
+
+.paid {
+    background: #d9f1e6;
+    color: #16844a;
+}
+
+.refunded {
+    background: #ffe2e6;
+    color: #d92d43;
+}
+
+.pending-payment {
+    background: #fff0cf;
+    color: #a96900;
+}
+
+.booked-date {
+    color: #748196;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.booked-date i {
+    margin-right: 5px;
+}
+
+.booking-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.booking-actions form {
+    margin: 0;
+}
+
+.view-btn,
+.confirm-btn,
+.cancel-btn,
+.complete-btn {
+    border-radius: 8px;
+    padding: 8px 13px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.view-btn {
+    border: 1px solid #1976ff;
+    background: white;
+    color: #1976ff;
+}
+
+.view-btn:hover {
+    background: #1976ff;
+    color: white;
+}
+
+.confirm-btn {
+    border: 1px solid #159447;
+    background: #159447;
+    color: white;
+}
+
+.cancel-btn {
+    border: 1px solid #dc3545;
+    background: white;
+    color: #dc3545;
+}
+
+.complete-btn {
+    border: 1px solid #1976ff;
+    background: #1976ff;
+    color: white;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 7px;
+}
+
+.empty-bookings {
+    background: white;
+    border: 1px solid #e5eaf0;
+    border-radius: 16px;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.empty-bookings i {
+    font-size: 55px;
+    color: #adb5bd;
+    margin-bottom: 15px;
+}
+
+.empty-bookings h4 {
+    color: #25344d;
+    font-weight: 700;
+}
+
+.empty-bookings p {
+    color: #7b8794;
+}
+
+@media (max-width: 1100px) {
+
+    .booking-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-card {
+        max-width: 900px;
+        width: 100%;
+        margin: auto;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .bookings-page {
+        padding: 25px 14px 45px;
+    }
+
+    .bookings-header {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .bookings-header h2 {
+        font-size: 25px;
+    }
+
+    .bookings-header p {
+        font-size: 14px;
+    }
+
+    .booking-count {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .booking-top {
+        flex-direction: column;
+    }
+
+    .booking-status {
+        align-self: flex-start;
+    }
+
+    .listing-image {
+        width: 90px;
+        height: 75px;
+    }
+
+    .listing-text h4 {
+        font-size: 16px;
+    }
+
+    .price-box {
+        align-items: flex-start;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .booking-details {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-item {
+        padding: 4px 0;
+    }
+
+    .booking-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .payment-info {
+        justify-content: space-between;
+    }
+
+    .booking-actions {
+        justify-content: stretch;
+    }
+
+    .view-btn,
+    .action-buttons,
+    .action-buttons form,
+    .confirm-btn,
+    .cancel-btn,
+    .complete-btn {
+        width: 100%;
+    }
+
+    .action-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+@media (max-width: 430px) {
+
+    .bookings-header {
+        flex-direction: column;
+    }
+
+    .booking-card {
+        padding: 15px;
+        border-radius: 13px;
+    }
+
+    .listing-info {
+        gap: 10px;
+    }
+
+    .listing-image {
+        width: 80px;
+        height: 68px;
+    }
+
+    .payment-info {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+}
+
+</style>
