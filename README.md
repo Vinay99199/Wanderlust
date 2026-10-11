@@ -1,5 +1,5 @@
 Wanderlust: 
-A MERN stack web application that allows users to explore, create, and manage travel listings with authentication, image uploads, and reviews.
+A full stack web application that allows users to explore, create, and manage travel listings with authentication, image uploads, and reviews.
 
 Live demo: https://wanderlust-yie1.onrender.com/listings
 
@@ -11,7 +11,7 @@ Reviews & Ratings,
 Razorpay,
 
 🛠️Tech Stack:
-React, Node.js, Express, MongoDB
+EJS, Node.js, Express, MongoDB
 
 ⚙️Setup:
 cd wanderlust
