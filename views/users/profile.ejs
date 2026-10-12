@@ -1,378 +1,1150 @@
 <% layout("/layouts/boilerplate") %>
 
 <style>
-:root {
-  --primary: #ff385c;
-  --primary-hover: #e00b41;
-  --primary-light: #fff0f3;
-  --dark: #222222;
-  --text-muted: #717171;
-  --border-color: #ebebeb;
-  --card-bg: #ffffff;
-  --bg-subtle: #f7f7f9;
-  --radius-lg: 20px;
-  --radius-md: 14px;
-  --radius-sm: 8px;
-  --shadow-subtle: 0 4px 24px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.1);
-  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.wander-profile-wrapper {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: var(--dark);
-}
-
-/* Outer Card */
-.wander-profile-card {
-  background: var(--card-bg);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-subtle);
-  overflow: hidden;
-  transition: var(--transition);
-}
-
-/* Wanderlust Cover Banner */
-.wander-banner {
-  height: 180px;
-  background: linear-gradient(135deg, #ff385c 0%, #e61e4d 40%, #d70466 100%);
-  position: relative;
-}
-
-.banner-overlay {
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at top right, rgba(255,255,255,0.2) 0%, transparent 60%);
-}
-
-/* Card Body */
-.wander-content {
-  padding: 0 32px 36px;
-  position: relative;
-}
-
-/* Top Bar: Avatar + Action Button */
-.wander-top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-top: -65px;
-  margin-bottom: 20px;
-}
-
-.avatar-container {
-  position: relative;
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  border: 4px solid #ffffff;
-  background: #ffffff;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-}
-
-.avatar-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-}
-
-.active-indicator {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 16px;
-  height: 16px;
-  background-color: #008a05;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
-}
-
-/* Edit Button */
-.btn-edit-profile {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #ffffff;
-  color: var(--dark);
-  border: 1px solid #b0b0b0;
-  padding: 10px 20px;
-  border-radius: var(--radius-md);
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: var(--transition);
-}
-
-.btn-edit-profile:hover {
-  background-color: var(--bg-subtle);
-  border-color: var(--dark);
-  transform: translateY(-1px);
-}
-
-/* User Identity Section */
-.user-meta {
-  margin-bottom: 30px;
-}
-
-.name-badge-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.user-name {
-  font-size: 1.85rem;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.5px;
-}
-
-.role-badge {
-  background: var(--primary-light);
-  color: var(--primary);
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.user-email {
-  margin-top: 6px;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Grid Layout */
-.wander-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-/* Individual Cards */
-.detail-card {
-  background: var(--bg-subtle);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  border-radius: var(--radius-md);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: var(--transition);
-}
-
-.detail-card:hover {
-  background: #ffffff;
-  border-color: var(--border-color);
-  box-shadow: var(--shadow-hover);
-  transform: translateY(-2px);
-}
-
-.card-icon-wrapper {
-  width: 40px;
-  height: 40px;
-  background: #ffffff;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--dark);
-  font-size: 1.1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-.card-icon-wrapper.heart-accent {
-  color: var(--primary);
-}
-
-.card-text-block {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.card-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.card-value {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--dark);
-  margin: 0;
-  word-break: break-word;
-}
-
-/* Wishlist Badge */
-.wishlist-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--primary);
-}
-
-/* Full Width Bio Card */
-.card-full-span {
-  grid-column: 1 / -1;
-  background: #ffffff;
-  border: 1px dashed var(--border-color);
-}
-
-.bio-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.bio-description {
-  margin: 0;
-  color: #484848;
-  font-size: 0.98rem;
-  line-height: 1.65;
-}
-
-/* Responsive Mobile View */
-@media (max-width: 768px) {
-  .wander-grid {
-    grid-template-columns: 1fr;
+  body:has(.profile-page) {
+    background: #faf8f4;
   }
 
-  .wander-top-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+  .profile-page {
+    position: relative;
+    left: 50%;
+    width: min(1160px, calc(100vw - 32px));
+    max-width: 1160px;
+    margin: 0;
+    padding: 16px 20px 54px;
+    color: #24313a;
+    transform: translateX(-50%);
   }
 
-  .btn-edit-profile {
+  .profile-hero {
+    position: relative;
+    display: flex;
+    min-height: 184px;
+    align-items: center;
+    gap: 22px;
+    overflow: hidden;
+    padding: 24px 28px;
+    border-radius: 7px;
+    background: #758078;
+    isolation: isolate;
+  }
+
+  .profile-hero-cover,
+  .profile-hero-shade {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
     width: 100%;
+    height: 100%;
+  }
+
+  .profile-hero-cover {
+    object-fit: cover;
+    object-position: center 48%;
+  }
+
+  .profile-hero-shade {
+    background: linear-gradient(90deg, rgba(20, 37, 42, 0.76), rgba(28, 40, 41, 0.48) 54%, rgba(26, 34, 34, 0.14));
+  }
+
+  .profile-hero--plain {
+    background: #e9e3d8;
+  }
+
+  .profile-hero--plain .profile-hero-shade {
+    background: linear-gradient(90deg, rgba(43, 49, 48, 0.76), rgba(43, 49, 48, 0.46));
+  }
+
+  .profile-avatar {
+    position: relative;
+    display: grid;
+    flex: 0 0 92px;
+    width: 92px;
+    height: 92px;
+    overflow: hidden;
+    place-items: center;
+    border: 3px solid rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    background: #ede9e0;
+    color: #24313a;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.8rem;
+  }
+
+  .profile-avatar img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .profile-hero-copy {
+    min-width: 0;
+    flex: 1;
+    color: #fff;
+  }
+
+  .profile-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin: 0 0 9px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+  }
+
+  .profile-eyebrow::after {
+    width: min(240px, 32vw);
+    height: 1px;
+    background: rgba(255, 255, 255, 0.4);
+    content: "";
+  }
+
+  .profile-name {
+    margin: 0 0 8px;
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.75rem, 3.5vw, 2.45rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+
+  .profile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 18px;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.8rem;
+  }
+
+  .profile-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .profile-tagline {
+    margin: 12px 0 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.95rem;
+    font-style: italic;
+  }
+
+  .profile-edit-button {
+    display: inline-flex;
+    min-height: 40px;
+    flex: 0 0 auto;
+    align-items: center;
     justify-content: center;
+    gap: 8px;
+    padding: 0 15px;
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    border-radius: 5px;
+    background: #fff;
+    color: #27323a;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 160ms ease, color 160ms ease;
   }
 
-  .wander-content {
-    padding: 0 20px 24px;
+  .profile-edit-button:hover {
+    background: #f4f1eb;
+    color: #202b32;
   }
 
-  .user-name {
-    font-size: 1.5rem;
+  .profile-tabs {
+    display: flex;
+    min-height: 48px;
+    align-items: stretch;
+    gap: 4px;
+    overflow-x: auto;
+    border-bottom: 1px solid #dedbd3;
+    scrollbar-width: thin;
   }
-}
 
+  .profile-tab {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    padding: 0 17px;
+    border-bottom: 2px solid transparent;
+    color: #34414a;
+    font-size: 0.79rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 150ms ease, border-color 150ms ease;
+  }
+
+  .profile-tab:hover,
+  .profile-tab.is-current {
+    border-bottom-color: #ed3444;
+    color: #d92536;
+  }
+
+  .profile-tab:focus-visible,
+  .profile-edit-button:focus-visible,
+  .profile-action:focus-visible,
+  .profile-show-more:focus-visible,
+  .saved-place-link:focus-visible,
+  .saved-remove-button:focus-visible {
+    outline: 3px solid rgba(237, 52, 68, 0.35);
+    outline-offset: 3px;
+  }
+
+  .profile-overview {
+    display: grid;
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.25fr);
+    gap: 18px;
+    padding-top: 12px;
+  }
+
+  .profile-panel {
+    min-width: 0;
+    border: 1px solid #e8e4dc;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.62);
+  }
+
+  .profile-personal {
+    padding: 16px 17px 15px;
+  }
+
+  .profile-section-title {
+    margin: 0;
+    color: #263741;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.13rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .profile-title-rule {
+    width: 31px;
+    height: 2px;
+    margin: 6px 0 10px;
+    background: #ec3846;
+  }
+
+  .profile-information {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+  }
+
+  .profile-information-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 5px 0;
+  }
+
+  .profile-information-row dt {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .profile-information-label {
+    display: block;
+    margin: 0 0 1px;
+    color: #6a6d6a;
+    font-size: 0.7rem;
+  }
+
+  .profile-information-label i {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    place-items: center;
+    border-radius: 50%;
+    background: #f0eee8;
+    color: #34434c;
+    font-size: 0.77rem;
+  }
+
+  .profile-information-value {
+    padding-left: 39px;
+  }
+
+  .profile-information-row dd {
+    margin: 0;
+    color: #27343c;
+    font-size: 0.78rem;
+    line-height: 1.42;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+  }
+
+  .profile-journey-column {
+    display: grid;
+    min-width: 0;
+    grid-template-rows: minmax(92px, 1fr) auto;
+    gap: 10px;
+  }
+
+  .profile-journey {
+    position: relative;
+    display: flex;
+    min-height: 104px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    overflow: hidden;
+    padding: 16px 23px;
+    border: 1px solid #f0ded5;
+    border-radius: 7px;
+    background: #f8eae3;
+  }
+
+  .profile-journey-copy {
+    min-width: 0;
+    max-width: 330px;
+  }
+
+  .profile-journey-eyebrow {
+    margin: 0 0 6px;
+    color: #9b554a;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .profile-journey-title {
+    margin: 0;
+    color: #293b43;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.08rem, 2vw, 1.35rem);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .profile-flight-path {
+    position: absolute;
+    right: 24%;
+    bottom: 11px;
+    width: 78px;
+    height: 55px;
+    border: 1px dashed rgba(218, 76, 71, 0.56);
+    border-top-color: transparent;
+    border-left-color: transparent;
+    border-radius: 50%;
+    transform: rotate(-24deg);
+  }
+
+  .profile-flight-path i {
+    position: absolute;
+    top: -5px;
+    right: -6px;
+    color: #d94347;
+    font-size: 1.1rem;
+    transform: rotate(24deg);
+  }
+
+  .profile-collection {
+    display: flex;
+    min-width: 110px;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0 6px 19px;
+    border-left: 1px solid rgba(204, 111, 99, 0.58);
+  }
+
+  .profile-collection-icon {
+    color: #293e48;
+    font-size: 1.15rem;
+  }
+
+  .profile-collection-count {
+    display: block;
+    color: #273a43;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.7rem;
+    line-height: 1;
+  }
+
+  .profile-collection-caption {
+    display: block;
+    margin-top: 5px;
+    color: #4e5a5d;
+    font-size: 0.64rem;
+    white-space: nowrap;
+  }
+
+  .profile-quick-actions {
+    display: flex;
+    min-height: 91px;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 15px;
+    border: 1px solid #e8e4dc;
+    border-radius: 7px;
+    background-color: #fffdfa;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='100' viewBox='0 0 180 100'%3E%3Cg fill='none' stroke='%23c8b9a4' stroke-width='1.3' opacity='.8'%3E%3Cpath d='M114 96c4-24 4-37 8-59m-8 44c-14-4-19-12-22-21 11 2 18 8 22 17m1-16c11-8 15-17 15-28-9 5-14 13-16 24m5 23c12-3 20-10 25-20-11 1-19 6-25 16m-7-15c-12-8-16-17-16-28 9 5 14 13 16 24'/%3E%3Cpath d='M25 92c17-7 31-8 45-6m-42 4c5-9 13-14 24-17m-7 16c8-11 19-17 32-18m-20 19c14-8 27-10 41-8'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-size: 155px 86px;
+  }
+
+  .profile-quick-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .profile-quick-title {
+    margin: 0 0 11px;
+    color: #273741;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .profile-action {
+    display: inline-flex;
+    min-height: 34px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 11px;
+    border: 1px solid #bfc4c4;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #273741;
+    font-size: 0.71rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 150ms ease, border-color 150ms ease;
+  }
+
+  .profile-action:hover {
+    border-color: #77878a;
+    background: #fff;
+    color: #1f3038;
+  }
+
+  .profile-action-primary {
+    border-color: #e32636;
+    background: #e32636;
+    color: #fff;
+  }
+
+  .profile-action-primary:hover {
+    border-color: #c81d2d;
+    background: #c81d2d;
+    color: #fff;
+  }
+
+  .saved-places-section {
+    padding-top: 20px;
+  }
+
+  .saved-places-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 12px;
+  }
+
+  .saved-heading-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .saved-heading-mark {
+    width: 4px;
+    height: 21px;
+    border-radius: 2px;
+    background: #e32636;
+  }
+
+  .saved-places-title {
+    margin: 0;
+    color: #263741;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .saved-places-subtitle {
+    margin: 0 0 2px;
+    color: #666a67;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.72rem;
+    font-style: italic;
+  }
+
+  .saved-places-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 11px;
+  }
+
+  .saved-places-count {
+    color: #73736d;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .profile-show-more {
+    display: inline-flex;
+    min-height: 32px;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    background: transparent;
+    color: #d92536;
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .profile-show-more:hover {
+    color: #ad1d2a;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .saved-places-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+    padding: 0 7px;
+  }
+
+  .saved-place-card {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #e8e5df;
+    border-radius: 7px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(35, 40, 40, 0.06);
+    transition: box-shadow 180ms ease, transform 180ms ease;
+  }
+
+  .saved-place-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(35, 40, 40, 0.1);
+  }
+
+  .saved-place-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .saved-place-link:hover {
+    color: inherit;
+  }
+
+  .saved-place-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #e8e5dc;
+  }
+
+  .saved-place-placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #9a978f;
+    font-size: 1.1rem;
+  }
+
+  .saved-place-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 220ms ease;
+  }
+
+  .saved-place-card:hover .saved-place-image {
+    transform: scale(1.025);
+  }
+
+  .saved-place-copy {
+    padding: 9px 11px 10px;
+  }
+
+  .saved-place-title {
+    margin: 0 0 3px;
+    color: #293840;
+    font-size: 0.79rem;
+    font-weight: 700;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .saved-place-location {
+    margin: 0;
+    color: #646b6c;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .saved-place-price {
+    margin: 3px 0 0;
+    color: #273741;
+    font-size: 0.7rem;
+    line-height: 1.4;
+  }
+
+  .saved-place-price strong {
+    font-weight: 700;
+  }
+
+  .saved-place-price span {
+    color: #697071;
+  }
+
+  .saved-remove-form {
+    position: absolute;
+    z-index: 2;
+    top: 9px;
+    right: 9px;
+    margin: 0;
+  }
+
+  .saved-remove-button {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.96);
+    color: #e32636;
+    font-size: 0.84rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+  }
+
+  .saved-remove-button:hover {
+    background: #fff;
+    color: #c81d2d;
+  }
+
+  .profile-empty-state {
+    padding: 22px 18px;
+    border: 1px solid #e8e4dc;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.65);
+  }
+
+  .profile-empty-state p {
+    margin: 0;
+    color: #646b6c;
+    font-size: 0.86rem;
+    line-height: 1.6;
+  }
+
+  .profile-empty-link {
+    display: inline-block;
+    margin-top: 8px;
+    color: #d92536;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .profile-empty-link:hover {
+    color: #ad1d2a;
+    text-decoration: underline;
+  }
+
+  .profile-closing-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    min-height: 54px;
+    margin-top: 17px;
+    border: 1px solid #e8e2d8;
+    border-radius: 6px;
+    background: #f0ece3;
+    color: #34434a;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.88rem;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .profile-closing-note::before,
+  .profile-closing-note::after {
+    width: 23px;
+    height: 1px;
+    background: #807d74;
+    content: "";
+  }
+
+  @media (max-width: 991.98px) {
+    .profile-overview {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+    }
+
+    .profile-quick-actions {
+      background-size: 125px 72px;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .profile-overview {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .profile-journey-column {
+      grid-template-rows: auto auto;
+    }
+
+    .profile-journey {
+      min-height: 98px;
+    }
+
+    .profile-summary {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .saved-places-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .profile-page {
+      padding: 12px 12px 38px;
+    }
+
+    .profile-hero {
+      min-height: 214px;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 20px 17px;
+    }
+
+    .profile-avatar {
+      flex-basis: 70px;
+      width: 70px;
+      height: 70px;
+      font-size: 1.45rem;
+    }
+
+    .profile-hero-copy {
+      flex-basis: calc(100% - 84px);
+    }
+
+    .profile-name {
+      font-size: 1.65rem;
+    }
+
+    .profile-meta {
+      gap: 5px 10px;
+      font-size: 0.7rem;
+    }
+
+    .profile-edit-button {
+      min-height: 35px;
+      margin-left: 82px;
+      padding: 0 12px;
+      font-size: 0.75rem;
+    }
+
+    .profile-tabs {
+      min-height: 44px;
+      gap: 0;
+    }
+
+    .profile-tab {
+      gap: 6px;
+      padding: 0 12px;
+      font-size: 0.72rem;
+    }
+
+    .profile-overview {
+      gap: 10px;
+      padding-top: 10px;
+    }
+
+    .profile-personal {
+      padding: 14px;
+    }
+
+    .profile-journey {
+      gap: 10px;
+      padding: 14px;
+    }
+
+    .profile-flight-path {
+      right: 25%;
+      width: 55px;
+      height: 42px;
+    }
+
+    .profile-collection {
+      min-width: 85px;
+      gap: 8px;
+      padding-left: 11px;
+    }
+
+    .profile-collection-count {
+      font-size: 1.45rem;
+    }
+
+    .profile-quick-actions {
+      min-height: 92px;
+      padding: 12px;
+      background-size: 105px 60px;
+    }
+
+    .profile-actions {
+      gap: 6px;
+    }
+
+    .profile-action {
+      min-height: 32px;
+      padding: 0 8px;
+      font-size: 0.66rem;
+    }
+
+    .saved-places-heading {
+      align-items: center;
+      gap: 8px;
+    }
+
+    .saved-heading-title {
+      gap: 7px;
+    }
+
+    .saved-places-title {
+      font-size: 1.18rem;
+    }
+
+    .saved-places-heading-copy {
+      display: grid;
+      gap: 4px;
+    }
+
+    .saved-places-subtitle {
+      font-size: 0.64rem;
+      line-height: 1.35;
+    }
+
+    .saved-places-actions {
+      gap: 6px;
+    }
+
+    .saved-places-count {
+      font-size: 0.65rem;
+    }
+
+    .profile-show-more {
+      font-size: 0.7rem;
+    }
+
+    .saved-places-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+      padding: 0 2px;
+    }
+
+    .saved-place-media {
+      aspect-ratio: 16 / 9;
+    }
+
+    .saved-place-copy {
+      padding: 8px;
+    }
+
+    .saved-place-title {
+      font-size: 0.75rem;
+    }
+
+    .saved-place-location,
+    .saved-place-price {
+      font-size: 0.66rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .profile-edit-button,
+    .profile-tab,
+    .profile-action,
+    .saved-place-card,
+    .saved-place-image {
+      transition: none;
+    }
+  }
 </style>
 
-<div class="wander-profile-wrapper">
-  <div class="wander-profile-card">
-    
-    <!-- Hero / Banner Section -->
-    <div class="wander-banner">
-      <div class="banner-overlay"></div>
+<%
+  const savedListings = (user.wishlist || []).filter((listing) => listing && listing._id);
+  const savedListingsPreview = savedListings.slice(0, 3);
+  const hiddenSavedListingsCount = savedListings.length - savedListingsPreview.length;
+  const profileImageUrl = user.profileImage && user.profileImage.url;
+  const profileInitial = (user.username || "").trim().charAt(0).toUpperCase();
+  const membershipDate = user.createdAt && !Number.isNaN(new Date(user.createdAt).getTime())
+    ? new Date(user.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    : null;
+  const heroCoverListing = savedListings.find((listing) => listing.image && listing.image.url);
+  const heroCoverUrl = heroCoverListing && heroCoverListing.image.url;
+%>
+
+<main class="profile-page">
+  <header class="profile-hero <%= heroCoverUrl ? '' : 'profile-hero--plain' %>">
+    <% if (heroCoverUrl) { %>
+      <img
+        class="profile-hero-cover"
+        src="<%= heroCoverUrl %>"
+        alt=""
+        onerror="this.closest('.profile-hero').classList.add('profile-hero--plain'); this.remove()"
+      >
+    <% } %>
+    <div class="profile-hero-shade" aria-hidden="true"></div>
+
+    <div class="profile-avatar" role="img" aria-label="<%= user.username %>'s profile photo">
+      <span aria-hidden="true"><%= profileInitial %></span>
+      <% if (profileImageUrl) { %>
+        <img src="<%= profileImageUrl %>" alt="" onerror="this.remove()">
+      <% } %>
     </div>
 
-    <!-- Main Content Container -->
-    <div class="wander-content">
-      
-      <!-- Top Action Bar (Avatar + Identity + Edit) -->
-      <div class="wander-top-bar">
-        <div class="avatar-container">
-          <img 
-            src="<%= user.profileImage?.url || 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" 
-            alt="<%= user.username %>'s Profile" 
-            class="avatar-img"
-          >
-          <span class="active-indicator" title="Active Wanderer"></span>
-        </div>
-
-        <div class="action-btn-group">
-          <a href="/profile/edit" class="btn-edit-profile">
-            <i class="fa-solid fa-pen-to-square"></i>
-            <span>Edit Profile</span>
-          </a>
-        </div>
+    <div class="profile-hero-copy">
+      <p class="profile-eyebrow">TRAVELER PROFILE</p>
+      <h1 class="profile-name"><%= user.username %></h1>
+      <div class="profile-meta">
+        <% if (user.email) { %>
+          <span class="profile-meta-item">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+            <%= user.email %>
+          </span>
+        <% } %>
+        <% if (membershipDate) { %>
+          <span class="profile-meta-item">
+            <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+            Member since <%= membershipDate %>
+          </span>
+        <% } %>
       </div>
-
-      <!-- User Identity -->
-      <div class="user-meta">
-        <div class="name-badge-wrap">
-          <h1 class="user-name"><%= user.username %></h1>
-          <span class="role-badge"><i class="fa-solid fa-compass"></i> Explorer</span>
-        </div>
-        <p class="user-email">
-          <i class="fa-regular fa-envelope"></i>
-          <span><%= user.email %></span>
-        </p>
-      </div>
-
-      <!-- Quick Stats / Highlights Grid -->
-      <div class="wander-grid">
-        
-        <!-- Phone Card -->
-        <div class="detail-card">
-          <div class="card-icon-wrapper">
-            <i class="fa-solid fa-phone"></i>
-          </div>
-          <div class="card-text-block">
-            <span class="card-label">Contact Number</span>
-            <p class="card-value"><%= user.phone || "Not provided" %></p>
-          </div>
-        </div>
-
-        <!-- Joined Date Card -->
-        <div class="detail-card">
-          <div class="card-icon-wrapper">
-            <i class="fa-regular fa-calendar-check"></i>
-          </div>
-          <div class="card-text-block">
-            <span class="card-label">Member Since</span>
-            <p class="card-value">
-              <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : "N/A" %>
-            </p>
-          </div>
-        </div>
-
-        <!-- Wishlist Card -->
-        <div class="detail-card">
-          <div class="card-icon-wrapper heart-accent">
-            <i class="fa-solid fa-heart"></i>
-          </div>
-          <div class="card-text-block">
-            <span class="card-label">Saved Wishlist</span>
-            <div class="wishlist-badge">
-              <span><%= user.wishlist ? user.wishlist.length : 0 %> Places Saved</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bio Card (Full Row) -->
-        <div class="detail-card card-full-span">
-          <div class="bio-header">
-            <div class="card-icon-wrapper">
-              <i class="fa-solid fa-quote-left"></i>
-            </div>
-            <span class="card-label">About Wanderer</span>
-          </div>
-          <p class="bio-description">
-            <%= user.bio || "No bio added yet. Share a bit about your travel style, favorite destinations, or your next bucket list spot!" %>
-          </p>
-        </div>
-
-      </div>
+      <% if (user.bio && user.bio.trim()) { %>
+        <p class="profile-tagline"><%= user.bio %></p>
+      <% } %>
     </div>
-  </div>
-</div>
+
+    <a href="/profile/edit" class="profile-edit-button">
+      <i class="fa-solid fa-pen" aria-hidden="true"></i>
+      Edit Profile
+    </a>
+  </header>
+
+  <nav class="profile-tabs" aria-label="Profile sections">
+    <a href="#profile-overview" class="profile-tab is-current">
+      <i class="fa-solid fa-user" aria-hidden="true"></i>
+      Overview
+    </a>
+    <a href="#saved-places" class="profile-tab">
+      <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+      Saved Places
+    </a>
+    <a href="/bookings/my" class="profile-tab">
+      <i class="fa-regular fa-calendar-check" aria-hidden="true"></i>
+      My Bookings
+    </a>
+  </nav>
+
+  <section class="profile-overview" id="profile-overview" aria-label="Profile overview">
+    <section class="profile-panel profile-personal" aria-labelledby="personal-information-heading">
+      <h2 class="profile-section-title" id="personal-information-heading">Personal Information</h2>
+      <div class="profile-title-rule" aria-hidden="true"></div>
+      <dl class="profile-information">
+        <div class="profile-information-row">
+            <dt class="profile-information-label"><i class="fa-solid fa-user" aria-hidden="true"></i>Full Name</dt>
+            <dd class="profile-information-value"><%= user.username %></dd>
+          </div>
+          <% if (user.email) { %>
+            <div class="profile-information-row">
+              <dt class="profile-information-label"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Address</dt>
+              <dd class="profile-information-value"><%= user.email %></dd>
+            </div>
+          <% } %>
+          <% if (user.phone && user.phone.trim()) { %>
+            <div class="profile-information-row">
+              <dt class="profile-information-label"><i class="fa-solid fa-phone" aria-hidden="true"></i>Phone Number</dt>
+              <dd class="profile-information-value"><%= user.phone %></dd>
+            </div>
+          <% } %>
+          <% if (user.bio && user.bio.trim()) { %>
+            <div class="profile-information-row">
+              <dt class="profile-information-label"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>About Me</dt>
+              <dd class="profile-information-value"><%= user.bio %></dd>
+            </div>
+          <% } %>
+      </dl>
+    </section>
+
+    <div class="profile-journey-column">
+      <section class="profile-journey" aria-label="Travel collection summary">
+        <div class="profile-journey-copy">
+          <p class="profile-journey-eyebrow">YOUR TRAVEL JOURNEY</p>
+          <h2 class="profile-journey-title">Turning travel dreams<br>into real adventures!</h2>
+        </div>
+        <span class="profile-flight-path" aria-hidden="true">
+          <i class="fa-solid fa-plane"></i>
+        </span>
+        <div class="profile-collection">
+          <i class="fa-regular fa-bookmark profile-collection-icon" aria-hidden="true"></i>
+          <span>
+            <strong class="profile-collection-count"><%= savedListings.length %></strong>
+            <span class="profile-collection-caption">Saved Places</span>
+          </span>
+        </div>
+      </section>
+
+      <section class="profile-quick-actions" aria-labelledby="profile-quick-title">
+        <div class="profile-quick-content">
+          <h2 class="profile-quick-title" id="profile-quick-title">Quick Actions</h2>
+          <div class="profile-actions">
+            <a href="/listings/favourites" class="profile-action profile-action-primary">
+              <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
+              View Saved Places
+            </a>
+            <a href="/bookings/my" class="profile-action">
+              <i class="fa-regular fa-calendar-check" aria-hidden="true"></i>
+              View My Bookings
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section class="saved-places-section" id="saved-places" aria-labelledby="saved-places-heading">
+    <div class="saved-places-heading">
+      <div class="saved-places-heading-copy">
+        <div class="saved-heading-title">
+          <span class="saved-heading-mark" aria-hidden="true"></span>
+          <h2 class="saved-places-title" id="saved-places-heading">Your Saved Places</h2>
+        </div>
+        <p class="saved-places-subtitle">Destinations you’ve added to your wishlist</p>
+      </div>
+      <% if (savedListings.length) { %>
+        <div class="saved-places-actions">
+          <span class="saved-places-count"><%= savedListings.length %> saved</span>
+          <% if (hiddenSavedListingsCount > 0) { %>
+            <a href="/listings/favourites" class="profile-show-more">
+              View all <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </a>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+
+    <% if (savedListings.length) { %>
+      <div class="saved-places-grid">
+        <% savedListingsPreview.forEach((listing) => { %>
+          <article class="saved-place-card">
+            <a href="/listings/<%= listing._id %>" class="saved-place-link">
+              <div class="saved-place-media">
+                <span class="saved-place-placeholder" aria-hidden="true">
+                  <i class="fa-regular fa-image"></i>
+                </span>
+                <% if (listing.image && listing.image.url) { %>
+                  <img
+                    src="<%= listing.image.url %>"
+                    class="saved-place-image"
+                    alt="<%= listing.title %>"
+                    loading="lazy"
+                    onerror="this.remove()"
+                  >
+                <% } %>
+              </div>
+              <div class="saved-place-copy">
+                <h3 class="saved-place-title"><%= listing.title %></h3>
+                <% if ((listing.location && listing.location.trim()) || (listing.country && listing.country.trim())) { %>
+                  <p class="saved-place-location">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <%= [listing.location, listing.country].filter((place) => place && place.trim()).join(", ") %>
+                  </p>
+                <% } %>
+                <% if (listing.price != null && Number.isFinite(Number(listing.price))) { %>
+                  <p class="saved-place-price">
+                    <strong>₹ <%= Number(listing.price).toLocaleString("en-IN") %></strong>
+                    <span>/ night</span>
+                  </p>
+                <% } %>
+              </div>
+            </a>
+            <form action="/listings/<%= listing._id %>/wishlist" method="POST" class="saved-remove-form">
+              <button
+                type="submit"
+                class="saved-remove-button"
+                aria-label="Remove <%= listing.title %> from saved places"
+                title="Remove from saved places"
+              >
+                <i class="fa-solid fa-heart" aria-hidden="true"></i>
+              </button>
+            </form>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="profile-empty-state">
+        <p>You haven’t saved any places yet. Find a stay for your next trip and keep it here.</p>
+        <a href="/listings" class="profile-empty-link">Explore stays</a>
+      </div>
+    <% } %>
+  </section>
+
+  <footer class="profile-closing-note">Collect moments, not things.</footer>
+</main>
+
+<script>
+  document.querySelectorAll(".saved-remove-form").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+        });
+
+        if (!response.ok || !(response.headers.get("content-type") || "").includes("application/json")) {
+          throw new Error("Could not update saved places.");
+        }
+
+        const result = await response.json();
+        if (!result.success) {
+          throw new Error(result.message || "Could not update saved places.");
+        }
+
+        window.location.reload();
+      } catch (error) {
+        console.error("Unable to remove saved place:", error);
+        window.location.reload();
+      }
+    });
+  });
+</script>
